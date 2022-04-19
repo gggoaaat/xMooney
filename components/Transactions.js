@@ -9,11 +9,10 @@ import {
     TableCaption,
     TableContainer
 } from "@chakra-ui/react";
-import { m } from "framer-motion";
-import Moralis from "moralis";
 import { useState, useEffect } from "react";
 import { useMoralisWeb3Api } from "react-moralis";
 import Moment from 'react-moment';
+// import ReactTimeAgo from "react-time-ago"
 import Web3 from "web3";
 import CustomContainer from "./CustomContainer";
 
@@ -70,6 +69,7 @@ export default function Transactions({ user }) {
                                     <Link href={`${BASE_URL}tx/${transaction.hash}`}>{transaction.hash.substr(transaction.hash.length - 10)}...</Link>
                                 </Td>
                                 <Td>
+                                    {/* <ReactTimeAgo date={transaction.block_timestamp} locale="en-US"/> */}
                                     <Moment date={transaction.block_timestamp} format="yyyy-MM-DD hh:mm:ss" ></Moment>
                                 </Td>
                                 <Td>
