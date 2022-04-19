@@ -10,16 +10,15 @@ export default function NFT({ user }) {
 
     const {getNFTBalances, data} = useNFTBalances();
 
-    const BASE_URL = "something.com"
     const [transactions, setTransactions] = useState([]);
 
     const fetchTransactions = async () => {
         const data = await Web3Api.account.getTransactions({
-            chain: "mainnet",
+            chain: process.env.NEXT_PUBLIC_CHAIN,
             address: user.get('ethAddress'),
             limit: 5
         }).catch(e => console.log(e))
-        if(data.balance)
+        if(data && data.balance)
         {
             setTransactions(Moralis.Units.FromWei(data.balance))            
         }
@@ -28,7 +27,7 @@ export default function NFT({ user }) {
     useEffect(() => {
         getNFTBalances({
             params: {
-                chain: "mainnet",
+                chain: process.env.NEXT_PUBLIC_CHAIN,
                 address: user.get('ethAddress')
             }
         })

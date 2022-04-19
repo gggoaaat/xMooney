@@ -9,17 +9,20 @@ import CustomContainer from "./CustomContainer";
 export default function Balance({ user }) {
 
     const Web3Api = useMoralisWeb3Api();
-    const {fetchERC20Balances, data} = useERC20Balances();
+    const { fetchERC20Balances, data } = useERC20Balances();
     const [ethBalance, setEthBalance] = useState(0);
 
     const fetchNativeBalance = async () => {
         const result = await Web3Api.account.getNativeBalance({
-            chain: "mainnet",
+            chain: process.env.NEXT_PUBLIC_CHAIN,
             address: user.get('ethAddress')
         }).catch(e => console.log(e))
-        if(result.balance)
-        {
-            setEthBalance(Moralis.Units.FromWei(result.balance))            
+        
+        if (result.balance) {
+            // console.log("Native Balance");
+            // console.log(user.get('ethAddress'));
+            // console.log(result);
+            setEthBalance(Moralis.Units.FromWei(result.balance))
         }
     }
 
@@ -27,22 +30,22 @@ export default function Balance({ user }) {
         fetchNativeBalance();
         fetchERC20Balances({
             params: {
-                chain: "mainnet",
+                chain: process.env.NEXT_PUBLIC_CHAIN,
                 address: user.get('ethAddress')
             }
         })
     }, [])
 
-    console.log(data)
-    
+    // console.log(data)
+
     return (
         <CustomContainer>
             <Text mb="6" fontSize="xl" fontWeight="bold"><b>&nbsp; MY ETH Balance:</b></Text>
-            {ethBalance && <Text>{ethBalance} ETH</Text>}
+            {ethBalance && <Text>{ethBalance} BNB</Text>}
             <Divider></Divider>
             {data && data.map(token => (
                 <div key={token.symbol}>
-                    <Text> {Moralis.Units.FromWei(token.balance)} <b>{token.symbol}</b></Text>
+                    <Text><b>{token.symbol}</b> - {Moralis.Units.FromWei(token.balance)} </Text>
                 </div>
             ))}
         </CustomContainer>

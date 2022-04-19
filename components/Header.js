@@ -6,7 +6,7 @@ export default function Header({user, logout, isLoggingOut}) {
         <header>
             <Flex px="10" py="6" justifyContent="space-between" bg="blackAlpha.400" color="white"> 
                 <Center>
-                    <Text fontSize="xl" fontWeight="bold">xMooney Dashboard</Text>
+                    <Text fontSize="xl" fontWeight="bold">{process.env.title}</Text>
                 </Center>
                 <Center>
                     <Text>
