@@ -22,7 +22,7 @@ export default function Balance({ user }) {
             // console.log("Native Balance");
             // console.log(user.get('ethAddress'));
             // console.log(result);
-            setEthBalance(Moralis.Units.FromWei(result.balance))
+            setEthBalance(Number(Moralis.Units.FromWei(result.balance)).toFixed(4))
         }
     }
 
@@ -45,7 +45,7 @@ export default function Balance({ user }) {
             <Divider></Divider>
             {data && data.map(token => (
                 <div key={token.symbol}>
-                    <Text><b>{token.symbol}</b> - {Moralis.Units.FromWei(token.balance)} </Text>
+                    <Text><b>{token.symbol}</b> - {Number(Moralis.Units.FromWei(token.balance)).toFixed(4)} </Text>
                 </div>
             ))}
         </CustomContainer>
