@@ -37,7 +37,7 @@ export default function Header({ user, logout, isLoggingOut }) {
                     <Text fontSize="xl" fontWeight="bold">{process.env.title}</Text>
                 </Center>
                 <Center>
-                    <Button mr="5" ml="4" rightIcon={<ArrowForwardIcon />} colorScheme='teal' variant='outline' disabled={isLoggingOut} onClick={ReleaseTokens}>Bounty</Button>
+                    <Button mr="5" ml="4" rightIcon={<ArrowForwardIcon />} colorScheme='teal' variant='outline' disabled={isLoggingOut} onClick={ReleaseTokens}>Release Tokens</Button>
                     <Text>
                         {user.getUsername()}
                     </Text>

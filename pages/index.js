@@ -1,4 +1,4 @@
-import { Button, Text, Flex, Box, TabList, Tabs, Tab, TabPanel, TabPanels, IdProvider } from "@chakra-ui/react";
+import { Button, Text, Flex, Box, TabList, Tabs, Tab, TabPanel, TabPanels, IdProvider, Link } from "@chakra-ui/react";
 import Head from "next/head";
 import { useMoralis } from "react-moralis"
 import Balance from "../components/Balance";
@@ -11,11 +11,11 @@ import Transactions from "../components/Transactions";
 
 export default function Home() {
 
-  const { isAuthenticated, authenticate, user, logout, isLoggingOut, isWeb3Enabled, isWeb3EnableLoading, enableWeb3  } = useMoralis();
+  const { isAuthenticated, authenticate, user, logout, isLoggingOut, isWeb3Enabled, isWeb3EnableLoading, enableWeb3 } = useMoralis();
   // 
 
   // useEffect(() => {
-    
+
   //   const connectorId = window.localStorage.getItem('connectorId') //as MoralisType.Web3ProviderType
   //   if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) {
   //     enableWeb3({ provider: connectorId }) }
@@ -42,14 +42,22 @@ export default function Home() {
 
         >
           <Text fontSize="5xl" fontWeight="bold" color="black">{process.env.title}</Text>
+          <Text fontSize="2sm" fontWeight="bold" color="black">Please connect to BSC Testnet</Text>
+          <Link href="https://docs.binance.org/smart-chain/wallet/metamask.html" target="_blank">How to Add BSC Testnet to Metamask</Link>
+
+          {process.env.enableWalletConnect &&
+            <>
+              <Button colorScheme="blackAlpha" size="lg" mt="6" onClick={() => authenticate(
+                {
+                  chain: process.env.NEXT_PUBLIC_CHAIN,
+                  signingMessage: "Sign to login to xMooney",
+                  provider: "walletconnect"
+                }
+              )} >Login with Walletconnect</Button>
+            </>
+          }
           <Button colorScheme="blackAlpha" size="lg" mt="6" onClick={() => authenticate(
-            {
-              signingMessage: "Sign to login to xMooney",
-              provider: "walletconnect"
-            }
-          )} >Login with Walletconnect</Button>
-          <Button colorScheme="blackAlpha" size="lg" mt="6" onClick={() => authenticate(
-            { signingMessage: "Sign to login to xMooney" }
+            { chain: process.env.NEXT_PUBLIC_CHAIN, signingMessage: "Sign to login to xMooney" }
           )} >Login with Metamask</Button>
         </Flex>
       </>
