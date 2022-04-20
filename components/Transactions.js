@@ -57,7 +57,7 @@ export default function Transactions({ user }) {
 
     useEffect(() => {
         fetchTransactions();
-    }, []);
+    }, [BASE_URL, fetchTransactions]);
 
     function CustomTable({ columns, data }) {
         // Use the state and functions returned from useTable to build your UI
@@ -192,9 +192,9 @@ export default function Transactions({ user }) {
                     <Table variant='striped' colorScheme="blackAlpha" {...getTableProps()}>
                         <Thead>
                             {headerGroups.map((headerGroup) => (
-                                <Tr {...headerGroup.getHeaderGroupProps()}>
+                                <Tr key={headerGroup.id}  {...headerGroup.getHeaderGroupProps()}>
                                     {headerGroup.headers.map((column) => (
-                                        <Th {...column.getHeaderProps()}>{column.render("Header")}</Th>
+                                        <Th key={column.id} {...column.getHeaderProps()}>{column.render("Header")}</Th>
                                     ))}
                                 </Tr>
                             ))}
@@ -203,10 +203,10 @@ export default function Transactions({ user }) {
                             {page.map((row, i) => {
                                 prepareRow(row);
                                 return (
-                                    <Tr {...row.getRowProps()}>
+                                    <Tr key={i} {...row.getRowProps()}>
                                         {row.cells.map((cell) => {
                                             return (
-                                                <Td {...cell.getCellProps()}>{cell.render("Cell")}</Td>
+                                                <Td key={cell.id} {...cell.getCellProps()}>{cell.render("Cell")}</Td>
                                             );
                                         })}
                                     </Tr>
@@ -268,7 +268,7 @@ export default function Transactions({ user }) {
                 ]
             }
         ],
-        []
+        [BASE_URL]
     );
 
     const data = transactions; //useMemo(() => transactions, []);
