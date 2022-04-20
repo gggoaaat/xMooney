@@ -1,4 +1,20 @@
-import { Button, Divider, FormControl, FormLabel, Input, Text } from "@chakra-ui/react";
+import {
+    Button, Divider, FormControl, FormLabel, Input, Link, Text, Table,
+    Thead,
+    Tbody,
+    Tfoot,
+    Tr,
+    Th,
+    Td,
+    TableCaption,
+    TableContainer,
+} from "@chakra-ui/react";
+import {
+    ArrowRightIcon,
+    ArrowLeftIcon,
+    ChevronRightIcon,
+    ChevronLeftIcon
+  } from "@chakra-ui/icons";
 import { m } from "framer-motion";
 import Moralis from "moralis";
 import { useState, useEffect } from "react";
@@ -18,7 +34,7 @@ export default function Balance({ user }) {
             chain: process.env.NEXT_PUBLIC_CHAIN,
             address: user.get('ethAddress')
         }).catch(e => console.log(e))
-        
+
         if (result.balance) {
             // console.log("Native Balance");
             // console.log(user.get('ethAddress'));
@@ -42,13 +58,40 @@ export default function Balance({ user }) {
     return (
         <CustomContainer>
             <Text mb="6" fontSize="xl" fontWeight="bold"><b>&nbsp; MY ETH Balance:</b></Text>
-            {ethBalance && <Text>{ethBalance} BNB</Text>}
+          
             <Divider></Divider>
-            {data && data.map(token => (
-                <div key={token.symbol}>
-                    <Text><b>{token.symbol}</b> - {Number(Moralis.Units.FromWei(token.balance)).toFixed(4)} </Text>
-                </div>
-            ))}
+            <TableContainer>
+                <Table variant='striped' colorScheme="blackAlpha">
+                    <Thead>
+                        <Tr>
+                            <Th> Token
+                            </Th>
+                            <Th>Amount</Th>
+                        </Tr>
+                    </Thead>
+                    <Tbody>
+                        {ethBalance && <>
+                        <Tr key="BNB">
+                            <Td width="200px">
+                                <b>BNB</b>
+                            </Td>
+                            <Td>
+                                <Text>{ethBalance} </Text>
+                            </Td>
+                        </Tr> </>}
+                        {data && data.map(token => (
+                            <Tr key={token.symbol}>
+                                <Td width="200px">
+                                    <b>{token.symbol}</b>
+                                </Td>
+                                <Td>
+                                    <Text>{Number(Moralis.Units.FromWei(token.balance)).toFixed(4)} </Text>
+                                </Td>
+                            </Tr>
+                        ))}
+                    </Tbody>
+                </Table>
+            </TableContainer>
         </CustomContainer>
     )
 }

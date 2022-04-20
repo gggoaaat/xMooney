@@ -77,7 +77,6 @@ export default function Home() {
               <TabPanel><Transactions user={user}></Transactions></TabPanel>
               <TabPanel><NFT user={user}></NFT></TabPanel>
               <TabPanel><Send user={user}></Send></TabPanel>
-
             </TabPanels>
           </Tabs>
         </Box>
