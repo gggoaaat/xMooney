@@ -25,9 +25,9 @@ export default function Header({ user, logout, isLoggingOut }) {
         // Wait until the transaction is confirmed
         await transaction.wait();
         
-        // Read new value
-        const message = await Moralis.executeFunction(readOptions);
-        console.log(message);
+        // // Read new value
+        // const message = await Moralis.executeFunction(readOptions);
+        // console.log(message);
     }
 
     return (

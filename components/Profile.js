@@ -8,8 +8,7 @@ export default function Profile({user}){
 
     const [input, setInput] = useState('');
     const {setUserData, isUserUpdating} = useMoralis();
-
-    console.log(input);
+   
     return (
        <CustomContainer>
            <Text><b>&nbsp; Username:</b> {user.getUsername()}</Text>

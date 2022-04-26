@@ -57,7 +57,7 @@ export default function Balance({ user }) {
 
     return (
         <CustomContainer>
-            <Text mb="6" fontSize="xl" fontWeight="bold"><b>&nbsp; MY ETH Balance:</b></Text>
+            {/* <Text mb="6" fontSize="xl" fontWeight="bold"><b>&nbsp; MY ETH Balance:</b></Text> */}
           
             <Divider></Divider>
             <TableContainer>
@@ -70,16 +70,17 @@ export default function Balance({ user }) {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {ethBalance && <>
-                        <Tr key="BNB">
+                        {ethBalance ? <><Tr key="BNB">
                             <Td width="200px">
                                 <b>BNB</b>
                             </Td>
                             <Td>
-                                <Text>{ethBalance} </Text>
+                                <Text>{ethBalance}</Text>
                             </Td>
-                        </Tr> </>}
-                        {data && data.map(token => (
+                        </Tr></> : <></>
+                        }
+
+                        { data && data.map(token => (
                             <Tr key={token.symbol}>
                                 <Td width="200px">
                                     <b>{token.symbol}</b>
@@ -88,7 +89,7 @@ export default function Balance({ user }) {
                                     <Text>{Number(Moralis.Units.FromWei(token.balance)).toFixed(4)} </Text>
                                 </Td>
                             </Tr>
-                        ))}
+                        ))} 
                     </Tbody>
                 </Table>
             </TableContainer>

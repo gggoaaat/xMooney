@@ -46,18 +46,28 @@ export default function Transactions({ user }) {
     const fetchTransactions = async () => {
         const data = await Web3Api.account.getTransactions({
             chain: process.env.NEXT_PUBLIC_CHAIN,
-            address: user.get('ethAddress'),
+            address: user.get('ethAddress')
             // limit: 25
         }).catch(e => console.log(e));
+        
         if (data && data.result) {
+
+
+            // setTransactions(data.result.filter(
+            //     transactions =>
+            //         transactions.from_address == process.env.tokenContractAddress.toLowerCase()
+            //         || transactions.to_address == process.env.tokenContractAddress.toLowerCase()
+            //         || transactions.to_address == process.env.vaultContractAddres.toLowerCase()
+            //         || transactions.to_address == process.env.vaultContractAddres.toLowerCase()
+            // ));
             setTransactions(data.result);
-            // console.log(transactions)
+            //console.log(transactions)
         }
     }
 
     useEffect(() => {
         fetchTransactions();
-    }, [BASE_URL, fetchTransactions]);
+    }, []);
 
     function CustomTable({ columns, data }) {
         // Use the state and functions returned from useTable to build your UI
@@ -229,7 +239,7 @@ export default function Transactions({ user }) {
                         accessor: "hash",
                         Cell: function (e) {
                             const thisValue = e.value;
-                            return <Link href={`${BASE_URL}tx/${thisValue}`} target="_blank">{thisValue.substr(0,thisValue.length - 40)}...</Link>
+                            return <Link href={`${BASE_URL}tx/${thisValue}`} target="_blank">{thisValue.substr(0, thisValue.length - 40)}...</Link>
                         }
                     },
                     {
@@ -244,7 +254,7 @@ export default function Transactions({ user }) {
                         accessor: "from_address",
                         Cell: function (e) {
                             const thisValue = e.value;
-                            const partial = e.value ? thisValue.substr(0,thisValue.length - 30) : e.value;
+                            const partial = e.value ? thisValue.substr(0, thisValue.length - 30) : e.value;
                             return <Link href={`${BASE_URL}address/${thisValue}`} target="_blank">{partial}...</Link>
                         }
                     },
@@ -253,7 +263,7 @@ export default function Transactions({ user }) {
                         accessor: "to_address",
                         Cell: function (e) {
                             const thisValue = e.value;
-                            const partial = e.value ? thisValue.substr(0,thisValue.length - 30) : e.value;
+                            const partial = e.value ? thisValue.substr(0, thisValue.length - 30) : e.value;
                             return <Link href={`${BASE_URL}address/${thisValue}`} target="_blank">{partial}...</Link>
                         }
                     },
