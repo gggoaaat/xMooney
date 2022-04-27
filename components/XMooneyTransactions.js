@@ -371,7 +371,7 @@ export default function XMooneyTransactions({ user }) {
                 </BreadcrumbItem>
 
                 <BreadcrumbItem isCurrentPage>
-                    <BreadcrumbLink href='#'>REWARDS: {(Web3.utils.fromWei((rebasedBalance - rawBalance).toString(), "gwei")).toString().replace(/\B(?=(?=\d*\.)(\d{3})+(?!\d))/g, ',')} xM</BreadcrumbLink>
+                    <BreadcrumbLink href='#'>REFLECTIONS: {(Web3.utils.fromWei((rebasedBalance - rawBalance).toString(), "gwei")).toString().replace(/\B(?=(?=\d*\.)(\d{3})+(?!\d))/g, ',')} xM</BreadcrumbLink>
                 </BreadcrumbItem>
             </Breadcrumb>            
             <CustomTable columns={columns} data={data1} />
