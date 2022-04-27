@@ -8,6 +8,7 @@ import NFT from "../components/NFT";
 import Profile from "../components/Profile";
 import Send from "../components/Send";
 import Transactions from "../components/Transactions";
+import XMooneyTransactions from "../components/XMooneyTransactions";
 
 export default function Home() {
 
@@ -75,7 +76,8 @@ export default function Home() {
             <TabList>
               <Tab fontWeight="bold">Profile</Tab>
               <Tab fontWeight="bold">Balance</Tab>
-              <Tab fontWeight="bold">Transactions</Tab>
+              <Tab fontWeight="bold">BSC Txs</Tab>
+              <Tab fontWeight="bold">xMooney Txs</Tab>
               <Tab fontWeight="bold">NFTs</Tab>
               <Tab fontWeight="bold">Send ETH</Tab>
             </TabList>
@@ -83,6 +85,7 @@ export default function Home() {
               <TabPanel><Profile user={user}></Profile></TabPanel>
               <TabPanel><Balance user={user}></Balance></TabPanel>
               <TabPanel><Transactions user={user}></Transactions></TabPanel>
+              <TabPanel><XMooneyTransactions user={user}></XMooneyTransactions></TabPanel>
               <TabPanel><NFT user={user}></NFT></TabPanel>
               <TabPanel><Send user={user}></Send></TabPanel>
             </TabPanels>

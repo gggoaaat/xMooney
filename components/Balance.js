@@ -86,7 +86,7 @@ export default function Balance({ user }) {
                                     <b>{token.symbol}</b>
                                 </Td>
                                 <Td>
-                                    <Text>{Number(Moralis.Units.FromWei(token.balance)).toFixed(4)} </Text>
+                                    <Text>{Number(Moralis.Units.FromWei(token.balance, token.decimals)).toFixed(4).toString().replace(/\B(?=(?=\d*\.)(\d{3})+(?!\d))/g, ',')}</Text>
                                 </Td>
                             </Tr>
                         ))} 
