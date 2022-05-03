@@ -50,7 +50,6 @@ export default function Isometric() {
             // set canvas size
             this.canvas.setAttribute('width', this.screen.width);
             this.canvas.setAttribute('height', this.screen.height);
-            this.canvas.setAttribute('height', this.screen.height);
 
             // tiles drawing loops
             for (let i = 0; i < this.map.width; i++) {

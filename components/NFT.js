@@ -31,7 +31,7 @@ export default function NFT({ user }) {
                 address: user.get('ethAddress')
             }
         })
-    }, [])
+    })
     
     return (
         <CustomContainer>

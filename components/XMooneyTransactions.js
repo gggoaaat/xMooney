@@ -102,7 +102,7 @@ export default function XMooneyTransactions({ user }) {
             }
         });
         getContractToken()
-    }, []);
+    });
 
     const getContractToken = async () => {
 

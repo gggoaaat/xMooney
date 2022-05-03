@@ -30,6 +30,32 @@ export default function Home() {
 
   const animation = `${animationKeyframes} 2s ease-in-out infinite`;
 
+  useEffect(() => {
+
+    const isomap = IsoMap();
+
+    (function () {
+
+      // isometric map settings
+      var params = {
+        screen: { width: 1300, height: 550 },
+        map: { width: 10, height: 10 },
+        tile: { width: 64, height: 32 }
+      }
+
+      // create map
+      // const isoMap = new IsoMap2();
+      let isoMap = new isomap(params);
+      isoMap.create();
+
+      // draw shape
+      // isoMap.drawPrism({ x: 5, y: 6 });
+      // isoMap.drawPrism({ x: 8, y: 7 });
+
+    })();
+  });
+
+
 
   if (!isAuthenticated) {
     return (
@@ -81,36 +107,6 @@ export default function Home() {
     )
   }
 
-  try {
-    useEffect(() => {
-
-      const isomap = IsoMap();
-
-      (function () {
-
-        // isometric map settings
-        var params = {
-          screen: { width: 1300, height: 550 },
-          map: { width: 14, height: 14 },
-          tile: { width: 64, height: 32 }
-        }
-
-        // create map
-        // const isoMap = new IsoMap2();
-        let isoMap = new isomap(params);
-        isoMap.create();
-
-        // draw shape
-        // isoMap.drawPrism({ x: 5, y: 6 });
-        // isoMap.drawPrism({ x: 8, y: 7 });
-
-      })();
-    }, []);
-  }
-  catch
-  {
-
-  }
 
   return (
     <>
