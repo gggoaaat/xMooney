@@ -31,28 +31,29 @@ export default function Home() {
   const animation = `${animationKeyframes} 2s ease-in-out infinite`;
 
   useEffect(() => {
+    if (isAuthenticated) {
+      const isomap = IsoMap();
 
-    const isomap = IsoMap();
+      (function () {
 
-    (function () {
+        // isometric map settings
+        var params = {
+          screen: { width: 1300, height: 550 },
+          map: { width: 10, height: 10 },
+          tile: { width: 64, height: 32 }
+        }
 
-      // isometric map settings
-      var params = {
-        screen: { width: 1300, height: 550 },
-        map: { width: 10, height: 10 },
-        tile: { width: 64, height: 32 }
-      }
+        // create map
+        // const isoMap = new IsoMap2();
+        let isoMap = new isomap(params);
+        isoMap.create();
 
-      // create map
-      // const isoMap = new IsoMap2();
-      let isoMap = new isomap(params);
-      isoMap.create();
+        // draw shape
+        // isoMap.drawPrism({ x: 5, y: 6 });
+        // isoMap.drawPrism({ x: 8, y: 7 });
 
-      // draw shape
-      // isoMap.drawPrism({ x: 5, y: 6 });
-      // isoMap.drawPrism({ x: 8, y: 7 });
-
-    })();
+      })();
+    }
   });
 
 
@@ -133,8 +134,10 @@ export default function Home() {
               <TabPanel><XMooneyTransactions user={user}></XMooneyTransactions></TabPanel>
               <TabPanel><NFT user={user}></NFT></TabPanel>
               <TabPanel><Send user={user}></Send></TabPanel>
-              <TabPanel> <Image id="scream" src={gameHouse} alt="Game House" />
-                <canvas id="canvas" className="center" /></TabPanel>
+              <TabPanel>
+                <Image id="scream" src={gameHouse} alt="Game House" />
+                <canvas id="canvas" className="center" />
+              </TabPanel>
             </TabPanels>
           </Tabs>
         </Box>

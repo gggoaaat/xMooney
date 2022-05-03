@@ -39,7 +39,7 @@ export default function NFT({ user }) {
             {data && data.result.map(nft => (
                 <div key={nft.hash}>
                    <Box mt="4" px="2" py="2" borderWidth="1px" borderRadius="md" key={nft.token_uri}>
-                       {nft.image && <Image src={nft.image} />}
+                       {nft.image && <Image src={nft.image} alt="NFT Image" />}
                        <p>{nft.token_uri}</p>
                    </Box>
                 </div>
