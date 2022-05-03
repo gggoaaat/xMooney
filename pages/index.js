@@ -1,8 +1,11 @@
-import { Button, Text, Flex, Box, TabList, Tabs, Tab, TabPanel, TabPanels, IdProvider, Link } from "@chakra-ui/react";
+import { Button, Container, Text, Flex, Box, TabList, Tabs, Tab, TabPanel, TabPanels, IdProvider, Link, keyframes, useFocusEffect } from "@chakra-ui/react";
+import { motion } from 'framer-motion';
 import Head from "next/head";
+import Image from "next/image";
 import { useMoralis } from "react-moralis"
 import Balance from "../components/Balance";
 import Header from "../components/Header";
+import bannerimg from "../assets/logos/xMooney_Logo_Token_300px_x_300px.png"
 import { useState, useEffect } from "react";
 import NFT from "../components/NFT";
 import Profile from "../components/Profile";
@@ -10,22 +13,22 @@ import Send from "../components/Send";
 import Transactions from "../components/Transactions";
 import XMooneyTransactions from "../components/XMooneyTransactions";
 
+import IsoMap from "../components/isometric";
+
 export default function Home() {
 
   const { isAuthenticated, authenticate, user, logout, isLoggingOut, isWeb3Enabled, isWeb3EnableLoading, enableWeb3 } = useMoralis();
-  // 
 
-  // useEffect(() => {
+  const animationKeyframes = keyframes`
+    0% { transform: scale(1) rotate(0); border-radius: 20%; }
+    25% { transform: scale(2) rotate(0); border-radius: 20%; }
+    50% { transform: scale(2) rotate(360deg); border-radius: 50%; }
+    75% { transform: scale(1) rotate(360deg); border-radius: 50%; }
+    100% { transform: scale(1) rotate(0); border-radius: 20%; }
+  `;
 
-  //   const connectorId = window.localStorage.getItem('connectorId') //as MoralisType.Web3ProviderType
-  //   if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) {
-  //     enableWeb3({ provider: connectorId }) }
-  // }, [isAuthenticated, isWeb3Enabled])
+  const animation = `${animationKeyframes} 2s ease-in-out infinite`;
 
-  //window.location.reload();
-  //sessionStorage.clear();
-
-  //console.log(isAuthenticated);
 
   if (!isAuthenticated) {
     return (
@@ -40,11 +43,23 @@ export default function Home() {
           width="100vw"
           height="100vh"
           bgGradient="linear(to-br, white.400, blackAlpha.300)"
-
         >
-          <Text fontSize="5xl" fontWeight="bold" color="black">{process.env.title}</Text>
+          <Box
+            as={motion.div}
+            animation={animation}
+            // not work: transition={{ ... }}
+            padding="2"
+            // bgGradient="linear(to-l, #ffffff, #ffffff)"
+            width="20"
+            height="20"
+            display="flex"
+          >
+            <Image src={bannerimg} alt="Eminent Logo" />
+          </Box>
+          <br></br>
+          {/* <Text fontSize="5xl" fontWeight="bold" color="black">{process.env.title}</Text> */}
           <Text fontSize="2sm" fontWeight="bold" color="black">Please connect to BSC Testnet</Text>
-          <Link href="https://docs.binance.org/smart-chain/wallet/metamask.html" target="_blank">How to Add BSC Testnet to Metamask</Link>
+          <Link href="https://docs.binance.org/smart-chain/wallet/metamask.html" target="_blank">How to Add BSC Testnet to Metamask?</Link>
 
           {process.env.enableWalletConnect &&
             <>
@@ -64,6 +79,42 @@ export default function Home() {
       </>
     )
   }
+
+
+
+  useEffect(() => {
+
+    const IsoMap2 = IsoMap();
+
+    (function () {
+
+      // isometric map settings
+      var params = {
+        screen: { width: 1024, height: 768 },
+        map: { width: 14, height: 14 },
+        tile: { width: 64, height: 32 }
+      }
+  
+      // create map
+      // const isoMap = new IsoMap2();
+      var isoMap = new IsoMap2(params);
+      isoMap.create();
+  
+      // draw shape
+      isoMap.drawPrism({ x: 5, y: 6 });
+      isoMap.drawPrism({ x: 8, y: 7 });
+  
+    })();
+
+
+
+
+
+  }, []);
+
+
+  
+
   return (
     <>
       <Head>
@@ -80,6 +131,7 @@ export default function Home() {
               <Tab fontWeight="bold">xMooney Txs</Tab>
               <Tab fontWeight="bold">NFTs</Tab>
               <Tab fontWeight="bold">Send ETH</Tab>
+              <Tab fontWeight="bold">My Land</Tab>
             </TabList>
             <TabPanels>
               <TabPanel><Profile user={user}></Profile></TabPanel>
@@ -88,6 +140,7 @@ export default function Home() {
               <TabPanel><XMooneyTransactions user={user}></XMooneyTransactions></TabPanel>
               <TabPanel><NFT user={user}></NFT></TabPanel>
               <TabPanel><Send user={user}></Send></TabPanel>
+              <TabPanel><canvas id="canvas" class="center" /></TabPanel>
             </TabPanels>
           </Tabs>
         </Box>

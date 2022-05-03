@@ -1,5 +1,6 @@
 import { ChakraProvider } from '@chakra-ui/react'
 import { MoralisProvider } from 'react-moralis'
+import '../styles/isometric.css'
 
 function MyApp({ Component, pageProps }) {
   return (
