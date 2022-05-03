@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useMoralis } from "react-moralis"
 import Balance from "../components/Balance";
 import Header from "../components/Header";
-import bannerimg from "../assets/logos/xMooney_Logo_Token_300px_x_300px.png"
+import bannerimg from "../assets/game/house.png"
 import { useState, useEffect } from "react";
 import NFT from "../components/NFT";
 import Profile from "../components/Profile";
@@ -13,7 +13,7 @@ import Send from "../components/Send";
 import Transactions from "../components/Transactions";
 import XMooneyTransactions from "../components/XMooneyTransactions";
 
-import IsoMap from "../components/isometric";
+import IsoMap from "../components/Isometric";
 
 export default function Home() {
 
@@ -80,46 +80,44 @@ export default function Home() {
     )
   }
 
+  try 
+  {
+    useEffect(() => {
 
-
-  useEffect(() => {
-
-    const IsoMap2 = IsoMap();
-
-    (function () {
-
-      // isometric map settings
-      var params = {
-        screen: { width: 1024, height: 768 },
-        map: { width: 14, height: 14 },
-        tile: { width: 64, height: 32 }
-      }
+      const isomap = IsoMap();
   
-      // create map
-      // const isoMap = new IsoMap2();
-      var isoMap = new IsoMap2(params);
-      isoMap.create();
+      (function () {
   
-      // draw shape
-      isoMap.drawPrism({ x: 5, y: 6 });
-      isoMap.drawPrism({ x: 8, y: 7 });
-  
-    })();
+        // isometric map settings
+        var params = {
+          screen: { width: 1300, height: 550 },
+          map: { width: 14, height: 14 },
+          tile: { width: 64, height: 32 }
+        }
+    
+        // create map
+        // const isoMap = new IsoMap2();
+        let isoMap = new isomap(params);
+        isoMap.create();
+    
+        // draw shape
+        // isoMap.drawPrism({ x: 5, y: 6 });
+        // isoMap.drawPrism({ x: 8, y: 7 });
+    
+      })();
+    }, []);
+  }
+  catch
+  {
 
-
-
-
-
-  }, []);
-
-
-  
-
+  }
+ 
   return (
     <>
       <Head>
         <title>{process.env.title}</title>
       </Head>
+      <Image id="scream" src={bannerimg} alt="Eminent Logo" wdith="100px" height="100" />
       <Flex direction="column" width="100vw" height="100vh">
         <Header user={user} logout={logout}> isLoggingOut={isLoggingOut}</Header>
         <Box flex="1" bg="blackAlpha.100" px="44" py="20">
@@ -140,7 +138,7 @@ export default function Home() {
               <TabPanel><XMooneyTransactions user={user}></XMooneyTransactions></TabPanel>
               <TabPanel><NFT user={user}></NFT></TabPanel>
               <TabPanel><Send user={user}></Send></TabPanel>
-              <TabPanel><canvas id="canvas" class="center" /></TabPanel>
+              <TabPanel><canvas id="canvas" className="center" /></TabPanel>
             </TabPanels>
           </Tabs>
         </Box>
