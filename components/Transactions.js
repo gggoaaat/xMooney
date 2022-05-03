@@ -67,7 +67,7 @@ export default function Transactions({ user }) {
 
     useEffect(() => {
         fetchTransactions();
-    });
+    },[]);
 
     function CustomTable({ columns, data }) {
         // Use the state and functions returned from useTable to build your UI

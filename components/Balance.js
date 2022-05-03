@@ -51,7 +51,7 @@ export default function Balance({ user }) {
                 address: user.get('ethAddress')
             }
         })
-    })
+    },[])
 
     // console.log(data)
 
