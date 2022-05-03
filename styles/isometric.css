@@ -11,5 +11,9 @@ canvas {
     margin-right: auto;
     margin-top: 20px;
     display: block;
-    border: #000 solid;
+    /* border: #000 solid; */
+}
+
+.hidden {
+    display:none !important;
 }

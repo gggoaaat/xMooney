@@ -1,4 +1,4 @@
-import debounce from 'lodash.debounce';
+import gameHouse from "../assets/game/house.png"
 
 export default function Isometric() {
 
@@ -196,7 +196,7 @@ export default function Isometric() {
             try {
                 if (this.context) {
                     this.context.fillStyle='#fff';
-                    this.context.fillRect(5, 20, 150, 50);
+                    this.context.fillRect(5, 20, 140, 50);
                     this.context.font = "30px Arial";
                     this.context.fillStyle='#000';
                     this.context.fillText(newTime, 10, 50);
