@@ -1,22 +1,24 @@
 import React, { forwardRef, useRef } from 'react'
 import { Canvas } from "@react-three/fiber";
 import Box from "../components/Box";
-// import OrbitControls from "../components/OrbitControls";
+import OrbitControls from "../components/OrbitControls";
 import LightBulb from "../components/Light";
 import Floor from "../components/Floor";
+import { Cloud, Stars, Sky, Image, Cylinder, Environment, useGLTF, Float, TransformControls, QuadraticBezierLine, Backdrop, ContactShadows } from '@react-three/drei'
+// import Draggable from "../components/Draggable";
 import { Suspense } from "react";
-import { Cloud, Stars, Sky, Image, Cylinder, OrbitControls, Environment, useGLTF, Float, TransformControls, QuadraticBezierLine, Backdrop, ContactShadows } from '@react-three/drei'
-import Draggable from "../components/Draggable";
 
 export default function Three() {
     const spaceman = useRef()
     const ship = useRef()
     function TimeofDay() {
         const start = 7 * 60 + 5;
-        const end = 5 * 60 + 57;
+        const end = 11 * 60 + 17;
         const date = new Date();
         const now = date.getHours() * 60 + date.getMinutes();
-
+        console.log(start)
+        console.log(end)
+        console.log(now)
         if (start <= now && now <= end) {
             return (<Sky distance={450000} sunPosition={[0, 1, 0]} inclination={0} azimuth={0.25} />)
         }
@@ -87,15 +89,15 @@ export default function Three() {
                 <Cylinder position={[-4, 8, 12]} rotateOnAxis={(270, 70, 50)}>
                     <meshBasicMaterial color="#9b8549" />
                 </Cylinder>
-                {/* <Draggable> */}
-                    <Suspense fallback={null}>
-                        <Box rotateX={0.8} rotateY={0.2} position={[0, 5, 5]} />
-                    </Suspense>
 
-                    <Suspense fallback={null}>
-                        <Box rotateX={3} rotateY={0.2} position={[4, 5, 20]} size={[1, 3, 1]} />
-                    </Suspense>
-                {/* </Draggable> */}
+                <Suspense fallback={null}>
+                    <Box rotateX={0.8} rotateY={0.2} position={[0, 5, 5]} />
+                </Suspense>
+
+                <Suspense fallback={null}>
+                    <Box rotateX={3} rotateY={0.2} position={[4, 5, 20]} size={[1, 3, 1]} />
+                </Suspense>
+
                 <Suspense fallback={null}>
                     <Box rotateX={3} rotateY={0.2} position={[0, 5, 0]} size={[5, 5, 5]} color="white" image="/xMooney_Logo_Token_1000px_x_1000px.png" />
                 </Suspense>
@@ -119,8 +121,7 @@ export default function Three() {
                     scale={[20, 20, 20]}
                     rotateOnAxis={([20, 21, 22], 2)}
                 />
-                <OrbitControls />
-                <Floor color="black" />
+
                 <TimeofDay></TimeofDay>
                 <LoadImage
                     position={[5, 10, 10]}
@@ -138,7 +139,8 @@ export default function Three() {
                 <Float scale={0.75} position={[-10, 10, -10]} rotation={[0, 0.6, 0]}>
                     <Ship scale={10} ref={ship} position={[-10, 10, -10]} />
                 </Float>
-
+                <OrbitControls />
+                <Floor color="black" />
             </Canvas>
         </div>
     );
