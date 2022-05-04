@@ -13,6 +13,7 @@
     "@chakra-ui/react": "^1.8.8",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
+    "@react-three/drei": "^9.6.2",
     "@react-three/fiber": "^8.0.13",
     "@walletconnect/web3-provider": "^1.7.7",
     "@web3auth/web3auth": "^0.8.2",
