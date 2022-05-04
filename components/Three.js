@@ -4,9 +4,9 @@ import Box from "../components/Box";
 // import OrbitControls from "../components/OrbitControls";
 import LightBulb from "../components/Light";
 import Floor from "../components/Floor";
-import Draggable from "../components/Draggable";
 import { Suspense } from "react";
 import { Cloud, Stars, Sky, Image, Cylinder, OrbitControls, Environment, useGLTF, Float, TransformControls, QuadraticBezierLine, Backdrop, ContactShadows } from '@react-three/drei'
+import Draggable from "../components/Draggable";
 
 export default function Three() {
     const spaceman = useRef()
@@ -21,7 +21,7 @@ export default function Three() {
             return (<Sky distance={450000} sunPosition={[0, 1, 0]} inclination={0} azimuth={0.25} />)
         }
         else {
-            
+
             return (<><Cloud scale={3} position={[-20, 10, -20]}></Cloud><Stars></Stars></>)
         }
     }
@@ -50,6 +50,8 @@ export default function Three() {
         )
     });
 
+    Spaceman.displayName = 'Spaceman';
+
     // One-click copy/paste from the poimandres market: https://market.pmnd.rs/model/low-poly-spaceship
     const Ship = forwardRef((props, ref) => {
         const { nodes, materials } = useGLTF('https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/low-poly-spaceship/model.gltf')
@@ -65,6 +67,9 @@ export default function Three() {
             </group>
         )
     })
+
+
+    Ship.displayName = 'Ship';
 
     return (
         <div className="scene">
@@ -82,16 +87,15 @@ export default function Three() {
                 <Cylinder position={[-4, 8, 12]} rotateOnAxis={(270, 70, 50)}>
                     <meshBasicMaterial color="#9b8549" />
                 </Cylinder>
-                <Draggable>
+                {/* <Draggable> */}
                     <Suspense fallback={null}>
                         <Box rotateX={0.8} rotateY={0.2} position={[0, 5, 5]} />
                     </Suspense>
-                </Draggable>
-                <Draggable>
+
                     <Suspense fallback={null}>
                         <Box rotateX={3} rotateY={0.2} position={[4, 5, 20]} size={[1, 3, 1]} />
                     </Suspense>
-                </Draggable>
+                {/* </Draggable> */}
                 <Suspense fallback={null}>
                     <Box rotateX={3} rotateY={0.2} position={[0, 5, 0]} size={[5, 5, 5]} color="white" image="/xMooney_Logo_Token_1000px_x_1000px.png" />
                 </Suspense>
@@ -113,28 +117,28 @@ export default function Three() {
                     position={[0, 10, -15]}
                     opacity={1}
                     scale={[20, 20, 20]}
-                    rotateOnAxis= {([20,21,22], 2)}
+                    rotateOnAxis={([20, 21, 22], 2)}
                 />
                 <OrbitControls />
                 <Floor color="black" />
                 <TimeofDay></TimeofDay>
-                {/* <LoadImage
+                <LoadImage
                     position={[5, 10, 10]}
                     url="/xMooney_Logo_Token_1000px_x_1000px.png" transparent
                     opacity={0.5}>
                     rotateY={30}
-                </LoadImage> */}
+                </LoadImage>
 
                 <Float position={[1, 10, -0.5]} rotation={[-70, 0, 0]} rotationIntensity={4} floatIntensity={6} speed={1.5}>
                     <Spaceman scale={2}>
                         <object3D position={[-0.6, 8, 0]} ref={spaceman} />
                     </Spaceman>
                 </Float>
-               
+
                 <Float scale={0.75} position={[-10, 10, -10]} rotation={[0, 0.6, 0]}>
-                <Ship scale={10} ref={ship}  position={[-10, 10, -10]} />
+                    <Ship scale={10} ref={ship} position={[-10, 10, -10]} />
                 </Float>
-                
+
             </Canvas>
         </div>
     );
