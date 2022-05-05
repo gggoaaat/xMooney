@@ -10,6 +10,8 @@ import Draggable from "../components/Draggable";
 import { Suspense } from "react";
 import Warehouse from "../components/Warehouse";
 import AsicMiner from "../components/AsicMiner";
+import GpuMiner from "../components/GpuMiner";
+
 
 export default function Three() {
     const spaceman = useRef()
@@ -158,6 +160,7 @@ export default function Three() {
                 <AsicMiner position={[-25, 17.5, 25]}></AsicMiner>
                 <AsicMiner position={[-15, 2.5, 25]} rotation={[0, Math.PI/1.5, 0]}></AsicMiner>
                 <AsicMiner position={[-5, 3.5, 15]} rotation={[0, Math.PI/1.5, Math.PI/2]}></AsicMiner>
+                <GpuMiner scale={1.5} position={[15, 5.5, -18]} rotation={[0, Math.PI/1.2, 0]}></GpuMiner>
                 <Floor color="white" />
             </Canvas>
         </div>
