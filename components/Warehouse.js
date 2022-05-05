@@ -167,4 +167,4 @@ export default function Warehouse({ ...props }) {
   )
 }
 
-useGLTF.preload('/scene.gltf')
+useGLTF.preload('/abandoned_warehouse_-_interior_scene/scene.gltf')
