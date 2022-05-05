@@ -159,7 +159,7 @@ export default function Three() {
 
                 </Spaceman>
                 <Float scale={1} position={[0, 2, 0]} rotation={[0, 0.0, 0]}>
-                <Ship scale={30} position={[-165, 25, 35]} rotation={[0, Math.PI / 1.5, 0]} />
+                <Ship scale={30} position={[-165, 25, 15]} rotation={[0, Math.PI / 1.5, 0]} />
                 </Float>
                 <OrbitControls />
 
