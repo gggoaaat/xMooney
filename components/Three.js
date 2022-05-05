@@ -76,7 +76,45 @@ export default function Three() {
             </group>
         )
     })
+    
+    function LoadAsicsOnShelf(props) {
+        let xStart = props.asic[0];
 
+        let xAdd2 = 4.5;
+        let yAdd2 = props.asic[1];
+
+        const xAdd3 = 4.5;
+        const yAdd3 = 11.25;
+
+        let AsicsArray = []
+        let AsicsArrayPoints = []
+        for (let index = 0; index < props.rows; index++) {
+            yAdd2 = yAdd2 + yAdd3;   
+            
+            xAdd2 = xStart;          
+            for (let indexX = 0; indexX < props.asics; indexX++) {
+               
+                xAdd2 += xAdd3;      
+                AsicsArrayPoints.push({ x: xAdd2, y: yAdd2 })
+                let AsicsObject = (<AsicMiner rotation={[0, Math.PI / 1, 0]} position={[xAdd2, yAdd2, props.asic[2]]} scale={1.25} ></AsicMiner>)
+                
+                AsicsArray.push(AsicsObject)
+            }
+            
+        }
+
+        AsicsArray.push(<Shelf scale={0.25} position={[props.shelf[0], props.shelf[1],props.shelf[2]]} rotation={[0, Math.PI/2, 0]}></Shelf>)
+
+        console.log(AsicsArrayPoints);
+
+        return AsicsArray;
+    }
+
+    
+
+    const TheseAsix = LoadAsicsOnShelf({ rows: 4, asics: 8, shelf : [-100, 4.5, -90], asic : [-120, 5, -90]});
+    const TheseAsix2 = LoadAsicsOnShelf({ rows: 4, asics: 8, shelf : [0, 4.5, -90], asic : [-20, 5, -90]});
+    const TheseAsix3 = LoadAsicsOnShelf({ rows: 4, asics: 8, shelf : [100, 4.5, -90], asic : [80, 5, -90]});
 
     Ship.displayName = 'Ship';
     let texture = "/xMooney_Logo_Token_300px_x_300px.png";
@@ -142,11 +180,11 @@ export default function Three() {
 
                 {/* <Float position={[1, 10, -0.5]} rotation={[-170, 0, 0]} rotationIntensity={4} floatIntensity={6} speed={1.5}> */}
                 {/* <Draggable> */}
-                <Spaceman scale={5.5} position={[10, 3, -0.5]} >
+                <Spaceman scale={8} position={[10, 3, -0.5]} >
                     <object3D ref={spaceman} />
                 </Spaceman>
                 <Suspense fallback={null}>
-                    <Box rotateX={3} rotation={[-38, 0, 0]} position={[10, 18.5, 2.45]} size={[1, 1,1]} color="white" image="/xMooney_Logo_Token_300px_x_300pxBW.png"/>
+                    <Box rotateX={3} rotation={[-38, 0, 0]} position={[10, 26, 3.9]} size={[1, 1,1]} color="white" image="/xMooney_Logo_Token_300px_x_300pxBW.png"/>
                 </Suspense>
          
                 {/* </Draggable> */}
@@ -163,45 +201,12 @@ export default function Three() {
                 <AsicMiner position={[-15, 2.5, 25]} rotation={[0, Math.PI/1.5, 0]}></AsicMiner>
                 <AsicMiner position={[-5, 3.5, 15]} rotation={[0, Math.PI/1.5, Math.PI/2]}></AsicMiner>
                 <GpuMiner scale={1.5} position={[15, 5.5, -18]} rotation={[0, Math.PI/1.2, 0]}></GpuMiner>
-                <Shelf  scale={0.25} position={[15, 4.5, -90]} rotation={[0, Math.PI/2, 0]}></Shelf>
+                
                 <AsicMiner position={[15, 5, -90]} scale={1.25}></AsicMiner>
                 
-                
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[-2, 50.25, -90]} scale={1.25} ></AsicMiner>
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[2.5, 50.25, -90]} scale={1.25}></AsicMiner>
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[7, 50.25, -90]} scale={1.25}></AsicMiner>
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[11.5, 50.25, -90]} scale={1.25}></AsicMiner>
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[16, 50.25, -90]} scale={1.25}></AsicMiner>
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[20.5, 50.25, -90]} scale={1.25}></AsicMiner>
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[25, 50.25, -90]} scale={1.25}></AsicMiner>
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[29.5, 50.25, -90]} scale={1.25}></AsicMiner>
-                
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[-2, 39, -90]} scale={1.25}></AsicMiner>
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[2.5, 39, -90]} scale={1.25}></AsicMiner>
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[7, 39, -90]} scale={1.25}></AsicMiner>
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[11.5, 39, -90]} scale={1.25}></AsicMiner>
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[16, 39, -90]} scale={1.25}></AsicMiner>
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[20.5, 39, -90]} scale={1.25}></AsicMiner>
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[25, 39, -90]} scale={1.25}></AsicMiner>
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[29.5, 39, -90]} scale={1.25}></AsicMiner>
-
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[-2, 27.75, -90]} scale={1.25}></AsicMiner>
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[2.5, 27.75, -90]} scale={1.25}></AsicMiner>
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[7, 27.75, -90]} scale={1.25}></AsicMiner>
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[11.5, 27.75, -90]} scale={1.25}></AsicMiner>
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[16, 27.75, -90]} scale={1.25}></AsicMiner>
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[20.5, 27.75, -90]} scale={1.25}></AsicMiner>
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[25, 27.75, -90]} scale={1.25}></AsicMiner>
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[29.5, 27.75, -90]} scale={1.25}></AsicMiner>
-
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[-2, 16.5, -90]} scale={1.25}></AsicMiner>
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[2.5, 16.5, -90]} scale={1.25}></AsicMiner>
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[7, 16.5, -90]} scale={1.25}></AsicMiner>
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[11.5, 16.5, -90]} scale={1.25}></AsicMiner>
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[16, 16.5, -90]} scale={1.25}></AsicMiner>
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[20.5, 16.5, -90]} scale={1.25}></AsicMiner>
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[25, 16.5, -90]} scale={1.25}></AsicMiner>
-                <AsicMiner rotation={[0, Math.PI/1, 0]} position={[29.5, 16.5, -90]} scale={1.25}></AsicMiner>
+                {TheseAsix}
+                {TheseAsix2}
+                {TheseAsix3}
                 
                 <Floor color="white" />
             </Canvas>
