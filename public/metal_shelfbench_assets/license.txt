@@ -1,0 +1,8 @@
+Model Information:
+* title:	Metal Shelf/Bench Assets
+* source:	https://sketchfab.com/3d-models/metal-shelfbench-assets-d7ee9b3cf26b415d96a81137e9c173d6
+* author:	AidanWatts3D (https://sketchfab.com/AidanWatts_3D)
+
+Model License:
+* license type:	SKETCHFAB Standard (https://sketchfab.com/licenses)
+* requirements:	Under basic restrictions, use worldwide, on all types of media, commercially or not, and in all types of derivative works
