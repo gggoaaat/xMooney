@@ -92,13 +92,13 @@ export default function Home() {
       <Flex direction="column">
         <Header user={user} logout={logout} > isLoggingOut={isLoggingOut}</Header>
         <Box flex="1" p={[0, 0, 0, 0]} bg="blackAlpha.100" px={[1, 1]} py={[1, 1]}>
-          <Tabs 
-          variant='enclosed'
-          pl={[50]} 
-          // size={["sm", "lg"]}
-           mt={[2, 4, 6, 8]} 
-          // variant='soft-rounded' 
-          colorScheme='green' align="center">
+          <Tabs
+            variant='enclosed'
+            pl={[50]}
+            // size={["sm", "lg"]}
+            mt={[2, 4, 6, 8]}
+            // variant='soft-rounded' 
+            colorScheme='green' align="center">
             <TabList overflowX="auto"
               css={{
                 scrollbarWidth: 'none',
@@ -123,14 +123,9 @@ export default function Home() {
               <TabPanel><XMooneyTransactions user={user}></XMooneyTransactions></TabPanel>
               <TabPanel><NFT user={user}></NFT></TabPanel>
               <TabPanel><Send user={user}></Send></TabPanel>
-
             </TabPanels>
           </Tabs>
         </Box>
-        <div >
-
-        </div>
-
       </Flex>
     </>
   )

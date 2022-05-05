@@ -99,15 +99,13 @@ export default function Three() {
                 shadows={true}
                 className="canvas"
                 camera={{
-                    position: [-6, 30, 75],
+                    position: [100, 60, 75],
                 }}
             >
-                <TimeofDay></TimeofDay>
-                
-                {/* <Cylinder position={[-4, 8, 12]} rotateOnAxis={(270, 70, 50)}>
-                    <meshBasicMaterial color="#9b8549" />
-                 
-                </Cylinder> */}
+                {/* <OrbitControls /> */}
+                <TimeofDay></TimeofDay>  
+
+                <Warehouse scale={[20, 20, 20]} position={[0, 52, 100]}></Warehouse>              
 
                 <Suspense fallback={null}>
                     <Box rotateX={0.8} rotateY={0.2} position={[0, 5, 5]} />
@@ -127,12 +125,11 @@ export default function Three() {
                 <Suspense fallback={null}>
                     <Box rotateX={3} rotateY={0.2} position={[25, 10, -25]} size={[5, 5, 5]} />
                 </Suspense>
-
-
                 <Suspense fallback={null}>
                     <Box rotateX={3} rotateY={0.2} position={[4, 5, 20]} size={[1, 3, 1]} />
                 </Suspense>
-                <Warehouse scale={[20, 20, 20]} position={[0, 52, 100]}></Warehouse>
+                
+                
                 {/* <Image url="/xMooney_Logo_Token_1000px_x_1000px.png"
                     transparent
                     position={[-243, 50, -20]}
@@ -167,7 +164,7 @@ export default function Three() {
                 <Float scale={1} position={[0, 2, 0]} rotation={[0, 0.0, 0]}>
                     <Ship scale={30} position={[-165, 25, 15]} rotation={[0, Math.PI / 1.5, 0]} />
                 </Float>
-                <OrbitControls />
+                
 
                 <GpuMiner scale={1.5} position={[15, 5.5, -18]} rotation={[0, Math.PI / 1.2, 0]}></GpuMiner>
                 {GroupOfAsics}
