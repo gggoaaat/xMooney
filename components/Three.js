@@ -96,8 +96,8 @@ export default function Three() {
 
                 <ambientLight color={"white"} intensity={0.3} />
 
-                <LightBulb position={[0, 65, 53.5]} />
-                <LightBulb position={[92, 72, 53.5]} />
+                <LightBulb position={[-.09, 65, 52.8]} />
+                <LightBulb position={[90, 72, 51.5]} />
                 {/* <Cylinder position={[-4, 8, 12]} rotateOnAxis={(270, 70, 50)}>
                     <meshBasicMaterial color="#9b8549" />
                  
