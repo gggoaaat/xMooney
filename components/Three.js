@@ -1,19 +1,21 @@
 import React, { forwardRef, useRef } from 'react'
 import { Canvas } from "@react-three/fiber";
 import Box from "../components/Box";
-import OrbitControls from "../components/OrbitControls";
+//import OrbitControls from "../components/OrbitControls";
 import LightBulb from "../components/Light";
 import Floor from "../components/Floor";
-import { Cloud, Stars, Sky, Image, Cylinder, Environment, useGLTF, Float, TransformControls, QuadraticBezierLine, Backdrop, ContactShadows } from '@react-three/drei'
-// import Draggable from "../components/Draggable";
+import { Cloud, Stars, Sky, Image, Cylinder, OrbitControls, Environment, useGLTF, Float, TransformControls, QuadraticBezierLine, Backdrop, ContactShadows } from '@react-three/drei'
+
+import Draggable from "../components/Draggable";
 import { Suspense } from "react";
+import Warehouse from "../components/Warehouse";
 
 export default function Three() {
     const spaceman = useRef()
     const ship = useRef()
     function TimeofDay() {
         const start = 7 * 60 + 5;
-        const end = 11 * 60 + 17;
+        const end = 22 * 60 + 17;
         const date = new Date();
         const now = date.getHours() * 60 + date.getMinutes();
         console.log(start)
@@ -72,7 +74,7 @@ export default function Three() {
 
 
     Ship.displayName = 'Ship';
-
+    let texture = "/xMooney_Logo_Token_300px_x_300px.png";
     return (
         <div className="scene">
             <Canvas
@@ -85,18 +87,18 @@ export default function Three() {
 
                 <ambientLight color={"white"} intensity={0.3} />
 
-                <LightBulb position={[0, 25, 0]} />
+                <LightBulb position={[0, 64, 53.5]} />
+                <LightBulb position={[90, 64, 53.5]} />
                 <Cylinder position={[-4, 8, 12]} rotateOnAxis={(270, 70, 50)}>
                     <meshBasicMaterial color="#9b8549" />
+                    {/* <meshPhysicalMaterial map={texture} color="#9b8549" /> */}
                 </Cylinder>
 
                 <Suspense fallback={null}>
                     <Box rotateX={0.8} rotateY={0.2} position={[0, 5, 5]} />
                 </Suspense>
 
-                <Suspense fallback={null}>
-                    <Box rotateX={3} rotateY={0.2} position={[4, 5, 20]} size={[1, 3, 1]} />
-                </Suspense>
+
 
                 <Suspense fallback={null}>
                     <Box rotateX={3} rotateY={0.2} position={[0, 5, 0]} size={[5, 5, 5]} color="white" image="/xMooney_Logo_Token_1000px_x_1000px.png" />
@@ -113,32 +115,43 @@ export default function Three() {
                 <Suspense fallback={null}>
                     <Box rotateX={3} rotateY={0.2} position={[25, 10, -25]} size={[5, 5, 5]} />
                 </Suspense>
-
+                <Warehouse scale={[20, 20, 20]} position={[0, 50, 100]}></Warehouse>
                 <Image url="/xMooney_Logo_Token_1000px_x_1000px.png"
                     transparent
-                    position={[0, 10, -15]}
+                    position={[-243, 50, -20]}
                     opacity={1}
-                    scale={[20, 20, 20]}
-                    rotateOnAxis={([20, 21, 22], 2)}
+                    scale={[100, 100, 100]}
+                    rotation={[0, Math.PI/2 , 0]}
                 />
-
+               
                 <TimeofDay></TimeofDay>
-                <LoadImage
-                    position={[5, 10, 10]}
-                    url="/xMooney_Logo_Token_1000px_x_1000px.png" transparent
+                {/* <LoadImage
+                    transparent
+                    position={[10, 18.5, 4]}
+                    url="/xMooney_Logo_Token_1000px_x_1000px.png"
                     opacity={0.5}>
                     rotateY={30}
-                </LoadImage>
+                </LoadImage> */}
 
-                <Float position={[1, 10, -0.5]} rotation={[-70, 0, 0]} rotationIntensity={4} floatIntensity={6} speed={1.5}>
-                    <Spaceman scale={2}>
-                        <object3D position={[-0.6, 8, 0]} ref={spaceman} />
-                    </Spaceman>
-                </Float>
-
-                <Float scale={0.75} position={[-10, 10, -10]} rotation={[0, 0.6, 0]}>
-                    <Ship scale={10} ref={ship} position={[-10, 10, -10]} />
-                </Float>
+                {/* <Float position={[1, 10, -0.5]} rotation={[-170, 0, 0]} rotationIntensity={4} floatIntensity={6} speed={1.5}> */}
+                {/* <Draggable> */}
+                <Spaceman scale={5.5} position={[10, 3, -0.5]} >
+                    <object3D ref={spaceman} />
+                </Spaceman>
+                <Suspense fallback={null}>
+                    <Box rotateX={3} rotation={[-38, 0, 0]} position={[10, 18.5, 2.45]} size={[1, 1,1]} color="white" image="/xMooney_Logo_Token_300px_x_300pxBW.png"/>
+                </Suspense>
+                <Suspense fallback={null}>
+                    <Box rotateX={3} rotateY={0.2} position={[4, 5, 20]} size={[1, 3, 1]} />
+                </Suspense>
+                {/* </Draggable> */}
+                {/* </Float> */}
+                <Spaceman scale={16} position={[-200, -10, -75]} rotation={[0, Math.PI/2.5, 0]} >
+                    <object3D ref={spaceman} />
+                </Spaceman>
+                {/* <Float scale={0.75} position={[-10, 10, -10]} rotation={[0, 0.6, 0]}> */}
+                    <Ship scale={30} ref={ship} position={[-230, 25, 35]} rotation={[0, Math.PI/1.5, 0]}/>
+                {/* </Float> */}
                 <OrbitControls />
                 <Floor color="black" />
             </Canvas>
