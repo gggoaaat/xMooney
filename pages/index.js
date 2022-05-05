@@ -89,15 +89,16 @@ export default function Home() {
       <Head>
         <title>{process.env.title}</title>
       </Head>
-      <Flex direction="column" minWidth='max-content' alignItems='center' gap='2'>
-        <Header user={user} logout={logout} width="100vw"> isLoggingOut={isLoggingOut}</Header>
-        <Box flex="1" mt={[2, 4, 6, 8]} p={[0, 0, 0, 0]} bg="blackAlpha.100" px={[1, 44]} py={[1, 20]}>
+      <Flex direction="column">
+        <Header user={user} logout={logout} > isLoggingOut={isLoggingOut}</Header>
+        <Box flex="1" p={[0, 0, 0, 0]} bg="blackAlpha.100" px={[1, 1]} py={[1, 1]}>
           <Tabs 
           variant='enclosed'
-          p={[20]} 
-          // size={["sm", "lg"]} mt={[2, 4, 6, 8]} 
+          pl={[50]} 
+          // size={["sm", "lg"]}
+           mt={[2, 4, 6, 8]} 
           // variant='soft-rounded' 
-          colorScheme='green' align="left">
+          colorScheme='green' align="center">
             <TabList overflowX="auto"
               css={{
                 scrollbarWidth: 'none',
@@ -115,8 +116,7 @@ export default function Home() {
               <Tab fontWeight="bold">Send ETH</Tab>
             </TabList>
             <TabPanels>
-              <TabPanel>
-                <Land user={user} width="100vw"></Land></TabPanel>
+              <TabPanel><Land user={user} ></Land></TabPanel>
               <TabPanel><Profile user={user}></Profile></TabPanel>
               <TabPanel><Balance user={user}></Balance></TabPanel>
               <TabPanel><Transactions user={user}></Transactions></TabPanel>
