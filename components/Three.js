@@ -1,38 +1,47 @@
 import React, { forwardRef, useRef } from 'react'
 import { Canvas } from "@react-three/fiber";
 import { Group } from "three";
-import Box from "../components/Box";
+import Box from "../components/assets/Box";
 //import OrbitControls from "../components/OrbitControls";
-import LightBulb from "../components/Light";
-import Floor from "../components/Floor";
+import LightBulb from "../components/assets/Light";
+import Floor from "../components/assets/Floor";
 import { Cloud, Stars, Sky, Image, Cylinder, OrbitControls, Environment, useGLTF, Float, TransformControls, QuadraticBezierLine, Backdrop, ContactShadows } from '@react-three/drei'
 
 import Draggable from "../components/Draggable";
 import { Suspense } from "react";
-import Warehouse from "../components/Warehouse";
-import AsicMiner from "../components/AsicMiner";
-import GpuMiner from "../components/GpuMiner";
-import Shelf from "../components/Shelf";
-import Spaceman from "../components/Spaceman";
-import Ship from "../components/Ship";
+import Warehouse from "../components/assets/Warehouse";
+import AsicMiner from "../components/assets/AsicMiner";
+import GpuMiner from "../components/assets/GpuMiner";
+import Shelf from "../components/assets/Shelf";
+import Spaceman from "../components/assets/Spaceman";
+import Ship from "../components/assets/Ship";
 
 
 export default function Three() {
 
     function TimeofDay() {
-        const start = 7 * 60 + 5;
-        const end = 22 * 60 + 17;
+        const start = 8 * 60 + 5;
+        const end = 18 * 60 + 17;
         const date = new Date();
         const now = date.getHours() * 60 + date.getMinutes();
         console.log(start)
         console.log(end)
         console.log(now)
         if (start <= now && now <= end) {
-            return (<Sky distance={450000} sunPosition={[0, 1, 0]} inclination={0} azimuth={0.25} />)
+            return (<>
+                <ambientLight color={"white"} intensity={0.9} />
+                <LightBulb color={"black"}  position={[-.09, 65, 52.8]} />
+                <LightBulb color={"black"}  position={[90, 72, 51.5]} />
+                <Sky distance={450000} sunPosition={[0, 1, 0]} inclination={0} azimuth={0.25} />
+            </>)
         }
         else {
 
-            return (<><Cloud scale={3} position={[-20, 10, -20]}></Cloud><Stars></Stars></>)
+            return (<>                
+                <LightBulb position={[-.09, 65, 52.8]} />
+                <LightBulb position={[90, 72, 51.5]} />
+                <Cloud scale={3} position={[-20, 10, -20]}></Cloud><Stars></Stars>
+            </>)
         }
     }
 
@@ -93,11 +102,8 @@ export default function Three() {
                     position: [-6, 30, 75],
                 }}
             >
-
-                <ambientLight color={"white"} intensity={0.3} />
-
-                <LightBulb position={[-.09, 65, 52.8]} />
-                <LightBulb position={[90, 72, 51.5]} />
+                <TimeofDay></TimeofDay>
+                
                 {/* <Cylinder position={[-4, 8, 12]} rotateOnAxis={(270, 70, 50)}>
                     <meshBasicMaterial color="#9b8549" />
                  
@@ -135,7 +141,7 @@ export default function Three() {
                     rotation={[0, Math.PI/2 , 0]}
                 /> */}
 
-                <TimeofDay></TimeofDay>
+                
                 {/* <LoadImage
                     transparent
                     position={[10, 18.5, 4]}
@@ -159,7 +165,7 @@ export default function Three() {
 
                 </Spaceman>
                 <Float scale={1} position={[0, 2, 0]} rotation={[0, 0.0, 0]}>
-                <Ship scale={30} position={[-165, 25, 15]} rotation={[0, Math.PI / 1.5, 0]} />
+                    <Ship scale={30} position={[-165, 25, 15]} rotation={[0, Math.PI / 1.5, 0]} />
                 </Float>
                 <OrbitControls />
 
