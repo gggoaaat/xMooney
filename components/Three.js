@@ -160,7 +160,7 @@ export default function Three() {
                 <Suspense fallback={null}>
                     <Box rotateX={3} rotateY={0.2} position={[4, 5, 20]} size={[1, 3, 1]} />
                 </Suspense>
-                <Warehouse scale={[20, 20, 20]} position={[0, 50, 100]}></Warehouse>
+                <Warehouse scale={[20, 20, 20]} position={[0, 52, 100]}></Warehouse>
                 {/* <Image url="/xMooney_Logo_Token_1000px_x_1000px.png"
                     transparent
                     position={[-243, 50, -20]}
@@ -189,7 +189,7 @@ export default function Three() {
          
                 {/* </Draggable> */}
                 {/* </Float> */}
-                <Spaceman scale={16} position={[-200, -10, -75]} rotation={[0, Math.PI/2.5, 0]} >
+                <Spaceman scale={16} position={[-200, -6.5, -75]} rotation={[0, Math.PI/2.5, 0]} >
                     <object3D ref={spaceman} />
                 </Spaceman>
                 {/* <Float scale={0.75} position={[-10, 10, -10]} rotation={[0, 0.6, 0]}> */}
