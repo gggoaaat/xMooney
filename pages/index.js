@@ -89,29 +89,41 @@ export default function Home() {
       <Head>
         <title>{process.env.title}</title>
       </Head>
-      <Flex direction="column" width="100vw" height="100vh">
-        <Header user={user} logout={logout}> isLoggingOut={isLoggingOut}</Header>
-        <Box flex="1" bg="blackAlpha.100" px="44" py="20">
-          <Tabs size="lg" colorScheme="blackAlpha" align="left" variant="enclosed">
-            <TabList>
+      <Flex direction="column" minWidth='max-content' alignItems='center' gap='2'>
+        <Header user={user} logout={logout} width="100vw"> isLoggingOut={isLoggingOut}</Header>
+        <Box flex="1" mt={[2, 4, 6, 8]} p={[0, 0, 0, 0]} bg="blackAlpha.100" px={[1, 44]} py={[1, 20]}>
+          <Tabs 
+          variant='enclosed'
+          p={[20]} 
+          // size={["sm", "lg"]} mt={[2, 4, 6, 8]} 
+          // variant='soft-rounded' 
+          colorScheme='green' align="left">
+            <TabList overflowX="auto"
+              css={{
+                scrollbarWidth: 'none',
+                '::-webkit-scrollbar': { display: 'none' },
+                '-webkit-overflow-scrolling': 'touch',
+                boxShadow: 'inset 0 -2px 0 rgba(0, 0, 0, 0.1)',
+                border: '0 none'
+              }}>
               <Tab fontWeight="bold">My Land</Tab>
               <Tab fontWeight="bold">Profile</Tab>
               <Tab fontWeight="bold">Balance</Tab>
               <Tab fontWeight="bold">BSC Txs</Tab>
               <Tab fontWeight="bold">xMooney Txs</Tab>
               <Tab fontWeight="bold">NFTs</Tab>
-              <Tab fontWeight="bold">Send ETH</Tab>              
+              <Tab fontWeight="bold">Send ETH</Tab>
             </TabList>
             <TabPanels>
-            <TabPanel> 
-              <Land user={user}></Land></TabPanel>
+              <TabPanel>
+                <Land user={user} width="100vw"></Land></TabPanel>
               <TabPanel><Profile user={user}></Profile></TabPanel>
               <TabPanel><Balance user={user}></Balance></TabPanel>
               <TabPanel><Transactions user={user}></Transactions></TabPanel>
               <TabPanel><XMooneyTransactions user={user}></XMooneyTransactions></TabPanel>
               <TabPanel><NFT user={user}></NFT></TabPanel>
               <TabPanel><Send user={user}></Send></TabPanel>
-              
+
             </TabPanels>
           </Tabs>
         </Box>

@@ -97,9 +97,6 @@ export default function Three() {
                 <Suspense fallback={null}>
                     <Box rotateX={0.8} rotateY={0.2} position={[0, 5, 5]} />
                 </Suspense>
-
-
-
                 <Suspense fallback={null}>
                     <Box rotateX={3} rotateY={0.2} position={[0, 5, 0]} size={[5, 5, 5]} rotation={[0, Math.PI/2.8, 0]} color="white" image="/xMooney_Logo_Token_1000px_x_1000px.png" />
                 </Suspense>
