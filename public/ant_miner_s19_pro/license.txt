@@ -1,0 +1,11 @@
+Model Information:
+* title:	Ant Miner S19 Pro
+* source:	https://sketchfab.com/3d-models/ant-miner-s19-pro-4fb91310fa474cfa907d4100ee634050
+* author:	Cem Gürbüz (https://sketchfab.com/cemgurbuzz)
+
+Model License:
+* license type:	CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
+* requirements:	Author must be credited. No commercial use.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Ant Miner S19 Pro" (https://sketchfab.com/3d-models/ant-miner-s19-pro-4fb91310fa474cfa907d4100ee634050) by Cem Gürbüz (https://sketchfab.com/cemgurbuzz) licensed under CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
