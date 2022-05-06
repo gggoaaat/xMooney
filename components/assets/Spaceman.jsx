@@ -51,6 +51,8 @@ export default function Spaceman({ ...props }) {
         console.log(currectCoords);
         console.log(keyCode)
     };
+
+    document.addEventListener("keydown", onDocumentKeyDown, false);
     
     return (
         <Spaceman {...props} >
