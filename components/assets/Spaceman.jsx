@@ -30,6 +30,28 @@ export default function Spaceman({ ...props }) {
     });
 
     Spaceman.displayName = 'Spaceman';
+
+    function onDocumentKeyDown(event) {
+        let currectCoords = coords;
+    
+        var keyCode = event.which;
+        if (keyCode == 87 || keyCode == 38) {
+            currectCoords.y += ySpeed;
+        } else if (keyCode == 83 || keyCode == 40) {
+            currectCoords.y -= ySpeed;
+        } else if (keyCode == 65 || keyCode == 37) {
+            currectCoords.x -= xSpeed;
+        } else if (keyCode == 68 || keyCode == 39) {
+            currectCoords.x += xSpeed;
+        } else if (keyCode == 32) {
+            currectCoords ={ x : 10, y : 3, z : -0.5 }; // { x : 0, y : 0, z : 0 };
+        }
+    
+        setCoords(currectCoords);
+        console.log(currectCoords);
+        console.log(keyCode)
+    };
+    
     return (
         <Spaceman {...props} >
             <object3D ref={spaceman} />
