@@ -17,9 +17,7 @@ import Spaceman from "../components/assets/Spaceman";
 import Ship from "../components/assets/Ship";
 
 
-export default function Three() {
-    // [10, 3, -0.5]
-    const [coords, setCoords] = useState({ x : 10, y : 3, z : -0.5 });
+export default function Three() {   
 
     function TimeofDay() {
         const start = 8 * 60 + 5;
@@ -96,11 +94,9 @@ export default function Three() {
             <AsicMiner position={[-5, 3.5, 15]} rotation={[0, Math.PI / 1.5, Math.PI / 2]}></AsicMiner></>)
     }()
 
-    // movement - please calibrate these values
-const xSpeed = 0.1;
-const ySpeed = 0.1;
 
-document.addEventListener("keydown", onDocumentKeyDown, false);
+
+
 
 
     return (
@@ -159,7 +155,7 @@ document.addEventListener("keydown", onDocumentKeyDown, false);
 
                 {/* <Float position={[1, 10, -0.5]} rotation={[-170, 0, 0]} rotationIntensity={4} floatIntensity={6} speed={1.5}> */}
                 {/* <Draggable> */}
-                <Spaceman scale={8} position={[coords.x, coords.y, -0.5]} >
+                <Spaceman scale={8} position={[10, 3, -0.5]} >
 
                 </Spaceman>
                 <Suspense fallback={null}>

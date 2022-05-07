@@ -14,7 +14,8 @@ import Send from "../components/Send";
 import Transactions from "../components/Transactions";
 import XMooneyTransactions from "../components/XMooneyTransactions";
 // import Land from "../components/Land";
-import Land from "../components/Three"
+// import Land from "../components/Three"
+import XMVR from "../components/XMVR"
 
 
 
@@ -116,7 +117,10 @@ export default function Home() {
               <Tab fontWeight="bold">Send ETH</Tab>
             </TabList>
             <TabPanels>
-              <TabPanel><Land user={user} ></Land></TabPanel>
+              <TabPanel>
+                {/* <Land user={user} ></Land> */}
+                <XMVR user={user} bgColor='#141622'></XMVR>
+              </TabPanel>
               <TabPanel><Profile user={user}></Profile></TabPanel>
               <TabPanel><Balance user={user}></Balance></TabPanel>
               <TabPanel><Transactions user={user}></Transactions></TabPanel>
