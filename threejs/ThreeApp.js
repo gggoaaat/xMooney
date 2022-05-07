@@ -2,12 +2,15 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as shader from "./Shaders/Shader";
 
+
 import help from './help'
+
 
 export default class Sketch {
 
     constructor(selector) {
-        console.log(selector);
+
+        //console.log(selector);
         this.container = selector;
         this.scene = new THREE.Scene();
         this.enableFog = false;
@@ -16,37 +19,39 @@ export default class Sketch {
             this.scene.fog = new THREE.FogExp2(0xffffff, 0.2);
         }
 
-        const threeHelp = help()
-        let plane = threeHelp.getPlane(30);
-        let directionalLight = threeHelp.getDirectionalLight(1);
-        let sphere = threeHelp.getSphere(0.05);
-        let boxGrid = threeHelp.getBoxGrid(10, 1.5);
-        let helper = new THREE.CameraHelper(directionalLight.shadow.camera);
-        let ambientLight = threeHelp.getAmbientLight(10);
+        this.threeHelp = help()
+        let plane = this.threeHelp.getPlane(30);
+        this.directionalLight = this.threeHelp.getDirectionalLight(1);
+        let sphere = this.threeHelp.getSphere(0.05);
+        let boxGrid = this.threeHelp.getBoxGrid(10, 1.5);
+        let helper = new THREE.CameraHelper(this.directionalLight.shadow.camera);
+        let ambientLight = this.threeHelp.getAmbientLight(10);
 
         plane.name = 'plane-1';
 
         plane.rotation.x = Math.PI / 2;
-        directionalLight.position.x = 13;
-        directionalLight.position.y = 10;
-        directionalLight.position.z = 10;
-        directionalLight.intensity = 2;
+        this.directionalLight.position.x = 13;
+        this.directionalLight.position.y = 10;
+        this.directionalLight.position.z = 10;
+        this.directionalLight.intensity = 2;
 
         this.scene.add(plane);
-        directionalLight.add(sphere);
-        this.scene.add(directionalLight);
+        this.directionalLight.add(sphere);
+        this.scene.add(this.directionalLight);
         this.scene.add(boxGrid);
         this.scene.add(helper);
         this.scene.add(ambientLight);
 
-        if (this.levaObject) {
-            directionalLight.intensity(this.levaObject.intensity)
-            directionalLight.position = this.levaObject.light;
+        if(this.container.cnvaUS)
+        {
+        this.directionalLight['intensity'] = (this.container.cnvaUS.values.intensity)
+        this.directionalLight.position['x'] = this.container.cnvaUS.values.x;
+        this.directionalLight.position['y'] = this.container.cnvaUS.values.y;
+        this.directionalLight.position['z'] = this.container.cnvaUS.values.z;
         }
-
         this.camera = new THREE.PerspectiveCamera(
             45,
-            window.innerWidth/window.innerHeight,
+            window.innerWidth / window.innerHeight,
             1,
             1000
         );
@@ -61,11 +66,25 @@ export default class Sketch {
         this.renderer.shadowMap.enabled = true;
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setClearColor('rgb(120, 120, 120)');
-	    this.container.appendChild(this.renderer.domElement);
+
+        if(this.container.firstChild)
+        {
+            console.log(this.container)   
+            document.getElementById("hello").innerHTML = ""; 
+            document.getElementById("hello").appendChild(this.renderer.domElement);
+        }
+        else
+        {
+            console.log(this.renderer.domElement)
+            // this.container.appendChild(this.renderer.domElement);
+
+            document.getElementById("hello").appendChild(this.renderer.domElement)
+        }       
+        
 
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
-        threeHelp.update(this.renderer, this.scene, this.camera, this.controls)
+        this.threeHelp.update(this.renderer, this.scene, this.camera, this.controls)
         // 
         // this.width = this.container.offsetWidth;
         // this.height = this.container.offsetHeight;
@@ -97,9 +116,8 @@ export default class Sketch {
         // this.resize();
         //this.render();
         // this.setupResize();
-        // this.settings();
+        // this.settings();1
     }
-
 
     settings() {
         let that = this;

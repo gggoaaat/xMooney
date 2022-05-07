@@ -1,13 +1,17 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
-export const useThree = (ThreeClass, levaObject) => {
-    const canvas = useRef(null);    
+export const useThree = (ThreeClass, cnvaUS) => {    
+         
+    const canvas = useRef(null);
 
     if(canvas.current)
-    canvas.current.levaObject = levaObject;
+    {
+        canvas.current.cnvaUS = cnvaUS;
+    }
 
-    useEffect(() => {
+    useEffect(() => {        
         new ThreeClass(canvas.current);
-    }, []);
+    });
+    
     return canvas;
 };

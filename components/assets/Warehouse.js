@@ -11,7 +11,7 @@ import { useGLTF } from '@react-three/drei'
 
 export default function Warehouse({ ...props }) {
   const group = useRef()
-  const { nodes, materials } = useGLTF('/abandoned_warehouse_-_interior_scene/scene.gltf')
+  const { nodes, materials } = useGLTF('../abandoned_warehouse_-_interior_scene/scene.gltf')
   return (
     <group ref={group} {...props} dispose={null}>
       <group rotation={[-Math.PI / 2, 0, 0]} scale={3.51}>

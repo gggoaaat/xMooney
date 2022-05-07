@@ -3,8 +3,6 @@ import * as THREE from "three";
 
 export default function Help() {
 
-    
-
     function getBox(w, h, d) {
         let geometry = new THREE.BoxGeometry(w, h, d);
         let material = new THREE.MeshPhongMaterial({

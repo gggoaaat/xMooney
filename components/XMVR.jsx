@@ -1,31 +1,29 @@
 import ThreeApp from "../threejs/ThreeApp";
-import { useLayoutEffect } from "react";
+import { useEffect, useRef, useState, useLayoutEffect } from "react";
 import { useThree } from "../hooks/useThree";
-import { folder, useControls } from 'leva'
+import { useControls } from 'leva'
 
+export default function XMVR() {  
 
-export default function XMVR() {
-
-    const { intensity, light } = useControls('My folder', {
-        lighting: folder({
-            intensity: { min: 0, max: 10 },
-        }),
-        something: folder({
-            light: [{ min: 0, max: 20 }, { min: 0, max: 20 }, { min: 0, max: 20 }],
-        }),
+    const values = useControls({ intensity: { value: 5, min : 0, max : 20, step : 1 },
+        x: { value: 5, min : 0, max : 20, step : 1 },
+        y: { value: 5, min : 0, max : 20, step : 1 },
+        z: { value: 5, min : 0, max : 20, step : 1 }
     })
 
-
-    const levaObject = {
-        intensity,
-        light
-    }
-
-    const canvas = useThree(ThreeApp);
+    const [cnva, setCNVA] = useState();
+    const canvas = useThree(ThreeApp, { cnva, setCNVA, values});  
 
     return (
         <>
-            <div ref={canvas} style={{ height: "100vh" }} />
+            <div ref={canvas} style={{ height: "100vh" } } id="hello" 
+                intensity={values.intensity}
+                lightX={values.x}
+                lightY={values.y}
+                lightZ={values.x}
+            >  
+                {cnva}          
+            </div>
         </>
     )
 }
