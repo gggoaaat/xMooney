@@ -5,7 +5,7 @@ import React from "react";
 function Floor(props) {
   return (
     <mesh {...props} recieveShadow={true}>
-      <boxBufferGeometry args={[75,5,75]} />
+      <boxBufferGeometry args={props.size} />
       <meshPhysicalMaterial color={props.color ? props.color : "black"} />
     </mesh>
   );
