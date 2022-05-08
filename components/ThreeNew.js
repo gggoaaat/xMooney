@@ -224,7 +224,7 @@ export default function ThreeNew() {
                         displayName={"Sphere_Ball"}
                         castShadow={"true"}
                         position={[values.bx, values.by, values.bz]}
-                        scale={5}
+                        scale={2}
                     ></Sphere>
                     <Plane name={"Plane_Ground"}
                         displayName={"Plane_Ground"}
@@ -243,7 +243,7 @@ export default function ThreeNew() {
                         roughness ={0.7}
                         rotation={[Math.PI / 2, 0, 0]}></Plane>
                     {/* <LightBulb position={[10, -1, -50]} /> */}
-                    {/* <Floor color="white" size={[100, 5, 100]} scale="1" /> */}
+                    { <Floor color="white"  position={[15, -20.1, 5]} size={[10, 2, 10] } scale="20" /> }
                     <OrbitControls 
                         target0={ new THREE.Vector3(0,0,0) } 
                         maxPolarAngle={(Math.PI / 2) * 0.9} 
