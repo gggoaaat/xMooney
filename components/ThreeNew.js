@@ -4,13 +4,13 @@ import * as THREE from "three";
 import {
     Canvas,
     useFrame,
-    useLoader 
+    useLoader
 } from "@react-three/fiber";
 import { TextureLoader } from 'three/src/loaders/TextureLoader'
 import { Group } from "three";
 import Box from "./assets/Box";
 //import OrbitControls from "../components/OrbitControls";
-import LightBulb from "./assets/Light";
+// import LightBulb from "./assets/Light";
 import Floor from "./assets/Floor";
 import { Cloud, Stars, Sky, Image, Cylinder, OrbitControls, Environment, useGLTF, Float, TransformControls, QuadraticBezierLine, Backdrop, ContactShadows } from '@react-three/drei'
 import five from "./assets/five.png";
@@ -36,54 +36,62 @@ export default function ThreeNew() {
         Canvas.displayName = "Test"
     }();
 
-
-    // useControls({
-    //     intensity: { value: 5, min: 0, max: 20, step: 1 },
-    //     x: { value: 5, min: 0, max: 20, step: 1 },
-    //     y: { value: 5, min: 0, max: 20, step: 1 },
-    //     z: { value: 5, min: 0, max: 20, step: 1 },
-    //     "shadows": folder({
-    //         lightLeft : {
-    //             x: { value: 5, min:  -5, max: 15, step: 1 },
-    //             y: { value: 5, min:  -5, max: 15, step: 1 },
-    //             z: { value: 5, min:  -5, max: 15, step: 1 }
-    //         },
-    //         rightLeft : {
-    //             x: { value: 5, min:  -5, max: 15, step: 1 },
-    //             y: { value: 5, min:  -5, max: 15, step: 1 },
-    //             z: { value: 5, min:  -5, max: 15, step: 1 }
-    //         }
-    //     })
-    // });
-
     const values = useControls({
         intensity: { value: 5, min: 0, max: 20, step: 1 },
         x: { value: 5, min: -5, max: 15, step: 1 },
-                y: { value: 5, min: -5, max: 15, step: 1 },
-                z: { value: 5, min: -5, max: 15, step: 1 },
-        boolean: true,   
+        y: { value: 5, min: -5, max: 15, step: 1 },
+        z: { value: 5, min: -5, max: 15, step: 1 },
+        showSpotlight: false,
+        showLightbulb: true,
+        showBall: false,
+        showCube: false,
         ball: folder(
             {
-                bx: { value: 5, min: -200, max: 200, step: 1 },
-                by: { value: 5, min: -200, max: 200, step: 1 },
-                bz: { value: 5, min: -200, max: 200, step: 1 }
-            }
-        ),     
-        lightLeft: folder(
-            {
-                lx: { value: 0, min: -100, max: 100, step: 1 },
-                ly: { value: 0, min: -100, max: 100, step: 1 },
-                lz: { value: 0, min: -100, max: 100, step: 1 }
+                bx: { value: 5, min: -90, max: 90, step: 0.1 },
+                by: { value: 5, min: 6, max: 70, step: 0.1 },
+                bz: { value: 5, min: -90, max: 90, step: 0.1 }
             },
-            { render: (get) => get('boolean') }
+            { render: (get) => get('showBall') }
         ),
-        lightRight: folder(
+        cube: folder(
             {
-                rx: { value: 0, min: -100, max: 100, step: 1 },
-                ry: { value: 0, min: -100, max: 100, step: 1 },
-                rz: { value: 0, min: -100, max: 100, step: 1 }
+                cx: { value: 5, min: -90, max: 90, step: 0.1 },
+                cy: { value: 5, min: 5, max: 70, step: 0.1 },
+                cz: { value: 5, min: -90, max: 90, step: 0.1 }
             },
-            { render: (get) => get('boolean') }
+            { render: (get) => get('showCube') }
+        ),
+        leftSpotlight: folder(
+            {
+                lslX: { value: 0, min: -100, max: 100, step: 1 },
+                lslY: { value: 0, min: -100, max: 100, step: 1 },
+                lslZ: { value: 0, min: -100, max: 100, step: 1 }
+            },
+            { render: (get) => get('showSpotlight') }
+        ),
+        rightSpotlight: folder(
+            {
+                rslX: { value: 0, min: -100, max: 100, step: 1 },
+                rslY: { value: 0, min: -100, max: 100, step: 1 },
+                rslZ: { value: 0, min: -100, max: 100, step: 1 }
+            },
+            { render: (get) => get('showSpotlight') }
+        ),
+        lightBulb1: folder(
+            {
+                lb1X: { value: -.09, min: -100, max: 100, step: .01 },
+                lb1Y: { value: 65, min: -100, max: 100, step:.01 },
+                lb1Z: { value: 52.8, min: -100, max: 100, step: .01 }
+            },
+            { render: (get) => get('showLightbulb') }
+        ),
+        lightBulb2: folder(
+            {
+                lb2X: { value: 90, min: -100, max: 100, step: .01 },
+                lb2Y: { value: 72, min: -100, max: 100, step: .01 },
+                lb2Z: { value: 51.5, min: -100, max: 100, step: .01 }
+            },
+            { render: (get) => get('showLightbulb') }
         )
     })
 
@@ -102,14 +110,14 @@ export default function ThreeNew() {
     function Plane(props) {
 
         let planeMaterial = getMaterial({
-            type: "lambert",
+            type: "standard",
             color: props.color, //? props.color : "rgb(10, 50, 80)",
             side: props.side,
-            map : props.map,
+            map: props.map,
             bumpMap: props.bumpMap,
             roughnessMap: props.roughnessMap,
             bumpScale: props.bumpScale,
-            metalness: props.map,
+            metalness: props.metalness,
             roughness: props.roughness
         });
         let plane = getPlane([props.width, props.height], null)
@@ -119,7 +127,7 @@ export default function ThreeNew() {
 
     function TimeofDay() {
         const start = 8 * 60 + 5;
-        const end = 18 * 60 + 17;
+        const end = 9 * 60 + 17;
         const date = new Date();
         const now = date.getHours() * 60 + date.getMinutes();
         console.log(start)
@@ -128,7 +136,7 @@ export default function ThreeNew() {
         if (start <= now && now <= end) {
             return (<>
                 <ambientLight color={"white"} intensity={0.9} />
-                <LightBulb color={"black"} position={[-.09, 65, 52.8]} />
+                <LightBulb color={"black"} position={[-.09, 65, 52.8]}  />
                 <LightBulb color={"black"} position={[90, 72, 51.5]} />
                 <Sky distance={450000} sunPosition={[0, 1, 0]} inclination={0} azimuth={0.25} />
             </>)
@@ -137,10 +145,10 @@ export default function ThreeNew() {
 
             return (<>
 
-                <LightBulb position={[-.09, 65, 52.8]} /> */}
-                <LightBulb position={[90, 72, 51.5]} />
+                <LightBulb position={[values.lb1X, values.lb1Y, values.lb1Z]} color={"black"} size={[5, 30, 10]} /> 
+                <LightBulb runAnimation={true} position={[values.lb2X, values.lb2Y, values.lb2Z]} size={[5, 30, 10]} />
                 {/* <Cloud scale={100} position={[-20, 60, -20]}></Cloud> */}
-                <Stars></Stars>
+                {/* <Stars></Stars> */}
             </>)
         }
     }
@@ -156,6 +164,14 @@ export default function ThreeNew() {
             side: props.side === undefined ? THREE.FrontSide : props.side
         };
 
+        if (props.type == "standard") {
+            materialOptions.map = props.map;
+            materialOptions.bumpMap = props.bumpMap;
+            materialOptions.roughnessMap = props.roughnessMap;
+            materialOptions.bumpScale = +props.bumpScale;
+            materialOptions.metalness = +props.metalness;
+            materialOptions.roughness = +props.roughness;
+        }
         switch (props.type) {
             case 'basic':
                 selectedMaterial = (<meshBasicMaterial {...materialOptions}></meshBasicMaterial>)
@@ -179,16 +195,23 @@ export default function ThreeNew() {
 
     function getPlane(props) {
 
+        const planeBufferGeometry = useRef();
+
+        console.log("planeBufferGeometry");
+        console.log(planeBufferGeometry);
+
+        planeBufferGeometry.displayName = props.displayName;
+
         return (<planeBufferGeometry args={props}></planeBufferGeometry>)
     }
 
     function getSphere(props) {
         const sphereBufferGeometry = useRef();
 
-        console.log("sphereBufferGeometry")
-        console.log(sphereBufferGeometry)
+        console.log("sphereBufferGeometry");
+        console.log(sphereBufferGeometry);
 
-        sphereBufferGeometry.displayName = props.displayName
+        sphereBufferGeometry.displayName = props.displayName;
 
         return (<sphereBufferGeometry ref={sphereBufferGeometry} args={props}></sphereBufferGeometry>)
     }
@@ -202,6 +225,9 @@ export default function ThreeNew() {
 
         lotsVars[mesh.displayName] = mesh;
         console.log(lotsVars)
+
+       
+
         return (
             <mesh ref={mesh} {...props}>
                 {objects}
@@ -209,7 +235,31 @@ export default function ThreeNew() {
         )
     }
 
-    // 
+    function LightBulb(props) {
+        const mesh = useRef();
+
+        mesh.something = 0;
+        if(props.runAnimation)
+        {
+            useFrame(({ clock }) => {
+                let thisValue = clock.getElapsedTime() * (Math.PI*.5)
+                //console.log(thisValue)
+                
+                mesh.something += 0.01;   
+                mesh.current.position.x = 50 * Math.cos(mesh.something) + 5// Math.PI * (mesh.current.position.x * (.001))
+                mesh.current.position.z = 150 * Math.sin(mesh.something) + 5 // Math.PI * (mesh.current.position.z * (.001))
+                mesh.current.position.y = 180 * Math.cos(mesh.something) + 5 // Math.PI * (mesh.current.position.z * (.001))
+            })
+        }
+
+        return (
+          <mesh ref={mesh} {...props} >
+            <pointLight castShadow />
+            <sphereBufferGeometry args={props.size} />
+            <meshPhongMaterial emissive={props.color ? props.color : "yellow" }  />
+          </mesh>
+        );
+      }
 
     function LoadEnvironment() {
 
@@ -218,23 +268,25 @@ export default function ThreeNew() {
         return (
             <>
                 <group position={[values.x, values.y, values.z]} scale="1">
-                    <TimeofDay></TimeofDay>
+                    <TimeofDay ></TimeofDay>
+                    <Box receiveShadow={true} position={[values.cx, values.cy, values.cz]} size={[10, 10, 10]} />
                     <Sphere
                         name={"Sphere_Ball"}
                         displayName={"Sphere_Ball"}
                         castShadow={"true"}
                         position={[values.bx, values.by, values.bz]}
                         scale={2}
+                        receiveShadow={true}
                     ></Sphere>
                     <Plane name={"Plane_Ground"}
                         displayName={"Plane_Ground"}
-                        receiveShadow={true} 
+                        receiveShadow={true}
                         side={THREE.DoubleSide}
                         // color= {"#ffffff"} //{colorObj}
-                        width={10} 
-                        height={10} 
-                        position={[15, 0, 5]} 
-                        scale={20} 
+                        width={10}
+                        height={10}
+                        position={[0, 0, 0]}
+                        scale={20}
                         map ={useLoader(TextureLoader,'/textures/concrete.jpg')}
                         bumpMap ={useLoader(TextureLoader,'/textures/concrete.jpg')}
                         roughnessMap ={useLoader(TextureLoader,'/textures/concrete.jpg')}
@@ -243,13 +295,16 @@ export default function ThreeNew() {
                         roughness ={0.7}
                         rotation={[Math.PI / 2, 0, 0]}></Plane>
                     {/* <LightBulb position={[10, -1, -50]} /> */}
-                    { <Floor color="white"  position={[15, -20.1, 5]} size={[10, 2, 10] } scale="20" /> }
-                    <OrbitControls 
-                        target0={ new THREE.Vector3(0,0,0) } 
-                        maxPolarAngle={(Math.PI / 2) * 0.9} 
-                        autoRotate={false} 
-                    />
-                    <Box position={[-1.2, 10, 5]} />
+                    {<Floor color="white" position={[0, -20.1, 0]} size={[10, 2, 10]} scale="20" />}
+                    <OrbitControls
+                        target0={new THREE.Vector3(0, 0, 0)}
+                        maxPolarAngle={(Math.PI / 2) * 0.9}
+                        autoRotate={false}
+                        minDistance={50}
+                        maxDistance={300}
+                        enablePan={false}
+                        maxP
+                    />                    
                 </group>
             </>
         );
@@ -277,8 +332,7 @@ export default function ThreeNew() {
         </>);
     }
 
-    function Ren(props)
-    {
+    function Ren(props) {
 
         //const Renderer = new WebGL1Renderer()
 
@@ -294,9 +348,9 @@ export default function ThreeNew() {
             <Canvas
                 shadows={true}
                 className="canvas"
-                 
+
                 camera={{
-                    position: [100, 60, 75]                    
+                    position: [100, 60, 75]
                 }}
             >
                 <Suspense fallback={null}>
@@ -311,7 +365,7 @@ export default function ThreeNew() {
                         position={[10, 50, 0]}
                         color={'rgb(255, 255, 255)'}
                     ></GetSpotLight> */}
-                    <GetSpotLight
+                    {/* <GetSpotLight
                         intensity={values.intensity}
                         position={[values.lx, values.ly, values.lz]}
                         color={'rgb(255, 220, 180)'}
@@ -320,7 +374,7 @@ export default function ThreeNew() {
                         intensity={values.intensity}
                         position={[values.rx, values.ry, values.rz]}
                         color={'rgb(255, 220, 180)'}
-                    ></GetSpotLight>
+                    ></GetSpotLight> */}
                     <Ren></Ren>
                 </Suspense>
             </Canvas>
