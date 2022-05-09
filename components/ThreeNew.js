@@ -371,7 +371,7 @@ export default function ThreeNew() {
             >
                 <Suspense fallback={null}>
                     <LoadEnvironment />
-                    <Box position={[80, 15, -80]} size={[20, 20, 20]} rotation={[0, Math.PI / 2.9, 0]} color="white" image="/xMooney_Logo_Token_1000px_x_1000px.png" />
+                    <Box receiveShadow={true} position={[80, 15, -80]} size={[20, 20, 20]} rotation={[0, Math.PI / 2.9, 0]} color="white" image="/xMooney_Logo_Token_1000px_x_1000px.png" />
                     {/* <GetSpotLight
                         intensity={values.intensity}
                         castShadow={true}
