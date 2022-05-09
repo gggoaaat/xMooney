@@ -365,7 +365,7 @@ export default function ThreeNew() {
             <>
                 <group position={[values.x, values.y, values.z]} scale="1">
                     <TimeofDay ></TimeofDay>
-                    <Box receiveShadow={true} position={[values.cx, values.cy, values.cz]} size={[10, 10, 10]} />
+                    {/* <Box receiveShadow={true} position={[values.cx, values.cy, values.cz]} size={[10, 10, 10]} /> */}
                     <Sphere
                         name={"Sphere_Ball"}
                         displayName={"Sphere_Ball"}
@@ -460,7 +460,7 @@ export default function ThreeNew() {
                 {/* <Camera></Camera> */}
                 <Suspense fallback={<Loader />}>
                     <LoadEnvironment />                    
-                    {/* <Box receiveShadow={true} position={[80, 15, -80]} size={[20, 20, 20]} rotation={[0, Math.PI / 2.9, 0]} color="white" image="/xMooney_Logo_Token_1000px_x_1000px.png" /> */}
+                    <Box receiveShadow={true} position={[5, 10, -8]} size={[10, 10, 10]} rotation={[0, Math.PI / 2.9, 0]} color="white" image="/xMooney_Logo_Token_1000px_x_1000px.png" />
                     {/* <GetSpotLight
                         intensity={values.intensity}
                         castShadow={true}
