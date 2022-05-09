@@ -146,11 +146,11 @@ export default function ThreeNew() {
             return (<>
 
                 <LightBulb 
-                    intensity={0.1}
+                    intensity={0.30}
                     runCircularAnimation={{ enabled: true, speed: 0.01, interval: 0, x: 150, y: -100, radius: 20 }} 
                     position={[values.lb1X, values.lb1Y, values.lb1Z]} 
                     size={[3, 30, 150]} 
-                    color={"black"}    
+                    color={"#F4FDFF"}    
                 />
                 <LightBulb 
                     intensity={1}
