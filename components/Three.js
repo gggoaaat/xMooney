@@ -38,8 +38,8 @@ export default function Three() {
         else {
 
             return (<>                
-                <LightBulb position={[-.09, 65, 52.8]} />
-                <LightBulb position={[90, 72, 51.5]} />
+                <LightBulb position={[-.09, 65, 52.8]} intensity={0.1}/>
+                <LightBulb position={[90, 72, 51.5]} intensity={0.1}/>
                 <Cloud scale={3} position={[-20, 10, -20]}></Cloud><Stars></Stars>
             </>)
         }

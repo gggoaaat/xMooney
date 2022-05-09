@@ -17,7 +17,7 @@ import five from "./assets/five.png";
 import Draggable from "./Draggable";
 import { cookieStorageManager } from '@chakra-ui/react';
 import { WebGL1Renderer } from 'three';
-// import Warehouse from "./assets/Warehouse";
+import Warehouse from "../components/assets/Warehouse";
 // import AsicMiner from "./assets/AsicMiner";
 // import GpuMiner from "./assets/GpuMiner";
 // import Shelf from "./assets/Shelf";
@@ -79,17 +79,17 @@ export default function ThreeNew() {
         ),
         lightBulb1: folder(
             {
-                lb1X: { value: -.09, min: -100, max: 100, step: .01 },
-                lb1Y: { value: 65, min: -100, max: 100, step:.01 },
-                lb1Z: { value: 52.8, min: -100, max: 100, step: .01 }
+                lb1X: { value: -.09, min: -100, max: 200, step: .01 },
+                lb1Y: { value: 65, min: -100, max: 200, step: .01 },
+                lb1Z: { value: 150, min: -100, max: 200, step: .01 }
             },
             { render: (get) => get('showLightbulb') }
         ),
         lightBulb2: folder(
             {
-                lb2X: { value: 90, min: -100, max: 100, step: .01 },
-                lb2Y: { value: 72, min: -100, max: 100, step: .01 },
-                lb2Z: { value: 51.5, min: -100, max: 100, step: .01 }
+                lb2X: { value: 90, min: -100, max: 200, step: .01 },
+                lb2Y: { value: 72, min: -100, max: 200, step: .01 },
+                lb2Z: { value: 51.5, min: -100, max: 200, step: .01 }
             },
             { render: (get) => get('showLightbulb') }
         )
@@ -135,8 +135,8 @@ export default function ThreeNew() {
         console.log(now)
         if (start <= now && now <= end) {
             return (<>
-                <ambientLight color={"white"} intensity={0.9} />
-                <LightBulb color={"black"} position={[-.09, 65, 52.8]}  />
+                <ambientLight color={"white"} />
+                <LightBulb color={"black"} position={[-.09, 65, 52.8]} />
                 <LightBulb color={"black"} position={[90, 72, 51.5]} />
                 <Sky distance={450000} sunPosition={[0, 1, 0]} inclination={0} azimuth={0.25} />
             </>)
@@ -145,10 +145,20 @@ export default function ThreeNew() {
 
             return (<>
 
-                <LightBulb position={[values.lb1X, values.lb1Y, values.lb1Z]} color={"black"} size={[5, 30, 10]} /> 
-                <LightBulb runAnimation={true} position={[values.lb2X, values.lb2Y, values.lb2Z]} size={[5, 30, 10]} />
+                <LightBulb 
+                    intensity={0.1}
+                    runCircularAnimation={{ enabled: true, speed: 0.01, interval: 0, x: 150, y: -100, radius: 20 }} 
+                    position={[values.lb1X, values.lb1Y, values.lb1Z]} 
+                    size={[3, 30, 150]} 
+                    color={"black"}    
+                />
+                <LightBulb 
+                    intensity={1}
+                    runCircularAnimation={{ enabled: true, speed: 0.01, interval: 0, x: 150, y: 150, z: 120, radius: 20 }} 
+                    position={[values.lb2X, values.lb2Y, values.lb2Z]} 
+                    size={[5, 30, 10]} />
                 {/* <Cloud scale={100} position={[-20, 60, -20]}></Cloud> */}
-                {/* <Stars></Stars> */}
+                <Stars></Stars>
             </>)
         }
     }
@@ -226,7 +236,7 @@ export default function ThreeNew() {
         lotsVars[mesh.displayName] = mesh;
         console.log(lotsVars)
 
-       
+
 
         return (
             <mesh ref={mesh} {...props}>
@@ -238,28 +248,33 @@ export default function ThreeNew() {
     function LightBulb(props) {
         const mesh = useRef();
 
-        mesh.something = 0;
-        if(props.runAnimation)
-        {
+        if (props.runCircularAnimation && props.runCircularAnimation.enabled) {
             useFrame(({ clock }) => {
-                let thisValue = clock.getElapsedTime() * (Math.PI*.5)
+                let thisValue = clock.getElapsedTime() * (Math.PI * .5)
                 //console.log(thisValue)
-                
-                mesh.something += 0.01;   
-                mesh.current.position.x = 50 * Math.cos(mesh.something) + 5// Math.PI * (mesh.current.position.x * (.001))
-                mesh.current.position.z = 150 * Math.sin(mesh.something) + 5 // Math.PI * (mesh.current.position.z * (.001))
-                mesh.current.position.y = 180 * Math.cos(mesh.something) + 5 // Math.PI * (mesh.current.position.z * (.001))
+
+                props.runCircularAnimation.interval += props.runCircularAnimation.speed;
+                if (props.runCircularAnimation.x) {
+                    mesh.current.position.x = props.runCircularAnimation.x * Math.cos(props.runCircularAnimation.interval) + props.runCircularAnimation.radius// Math.PI * (mesh.current.position.x * (.001))
+                }
+                if (props.runCircularAnimation.z) {
+                    mesh.current.position.z = props.runCircularAnimation.z * Math.sin(props.runCircularAnimation.interval) + props.runCircularAnimation.radius // Math.PI * (mesh.current.position.z * (.001))
+                }
+
+                if (props.runCircularAnimation.y) {
+                    mesh.current.position.y = props.runCircularAnimation.y * Math.sin(props.runCircularAnimation.interval) + props.runCircularAnimation.radius // Math.PI * (mesh.current.position.z * (.001))
+                }
             })
         }
 
         return (
-          <mesh ref={mesh} {...props} >
-            <pointLight castShadow />
-            <sphereBufferGeometry args={props.size} />
-            <meshPhongMaterial emissive={props.color ? props.color : "yellow" }  />
-          </mesh>
+            <mesh ref={mesh} {...props} >
+                <pointLight castShadow intensity={props.intensity} />
+                <sphereBufferGeometry args={props.size} />
+                <meshPhongMaterial emissive={props.color ? props.color : "yellow"} />
+            </mesh>
         );
-      }
+    }
 
     function LoadEnvironment() {
 
@@ -269,14 +284,14 @@ export default function ThreeNew() {
             <>
                 <group position={[values.x, values.y, values.z]} scale="1">
                     <TimeofDay ></TimeofDay>
-                    <Box receiveShadow={true} position={[values.cx, values.cy, values.cz]} size={[10, 10, 10]} />
+                    {/* <Box receiveShadow={true} position={[values.cx, values.cy, values.cz]} size={[10, 10, 10]} /> */}
                     <Sphere
                         name={"Sphere_Ball"}
                         displayName={"Sphere_Ball"}
-                        castShadow={"true"}
+                        castShadow={true}
                         position={[values.bx, values.by, values.bz]}
                         scale={2}
-                        receiveShadow={true}
+                        receiveShadow={false}
                     ></Sphere>
                     <Plane name={"Plane_Ground"}
                         displayName={"Plane_Ground"}
@@ -287,12 +302,12 @@ export default function ThreeNew() {
                         height={10}
                         position={[0, 0, 0]}
                         scale={20}
-                        map ={useLoader(TextureLoader,'/textures/concrete.jpg')}
-                        bumpMap ={useLoader(TextureLoader,'/textures/concrete.jpg')}
-                        roughnessMap ={useLoader(TextureLoader,'/textures/concrete.jpg')}
-                        bumpScale ={0.01}
-                        metalness ={0.1}
-                        roughness ={0.7}
+                        map={useLoader(TextureLoader, '/textures/grass3.jpg')}
+                        bumpMap={useLoader(TextureLoader, '/textures/grass3.jpg')}
+                        roughnessMap={useLoader(TextureLoader, '/textures/grass3.jpg')}
+                        bumpScale={1}
+                        metalness={-.5}
+                        roughness={101}
                         rotation={[Math.PI / 2, 0, 0]}></Plane>
                     {/* <LightBulb position={[10, -1, -50]} /> */}
                     {<Floor color="white" position={[0, -20.1, 0]} size={[10, 2, 10]} scale="20" />}
@@ -304,7 +319,8 @@ export default function ThreeNew() {
                         maxDistance={300}
                         enablePan={false}
                         maxP
-                    />                    
+                    />
+                    <Warehouse  receiveShadow={false} scale={[3, 3, 3]} position={[0, (2.95*3)-.1, 80]}></Warehouse>              
                 </group>
             </>
         );
@@ -355,6 +371,7 @@ export default function ThreeNew() {
             >
                 <Suspense fallback={null}>
                     <LoadEnvironment />
+                    <Box position={[80, 15, -80]} size={[20, 20, 20]} rotation={[0, Math.PI / 2.9, 0]} color="white" image="/xMooney_Logo_Token_1000px_x_1000px.png" />
                     {/* <GetSpotLight
                         intensity={values.intensity}
                         castShadow={true}

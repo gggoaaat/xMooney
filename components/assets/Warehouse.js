@@ -9,9 +9,9 @@ title: Abandoned Warehouse - Interior Scene
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 
-export default function Warehouse({ ...props }) {
+export default function Model({ ...props }) {
   const group = useRef()
-  const { nodes, materials } = useGLTF('../abandoned_warehouse_-_interior_scene/scene.gltf')
+  const { nodes, materials } = useGLTF('/abandoned_warehouse_-_interior_scene/scene.gltf')
   return (
     <group ref={group} {...props} dispose={null}>
       <group rotation={[-Math.PI / 2, 0, 0]} scale={3.51}>
@@ -54,19 +54,19 @@ export default function Warehouse({ ...props }) {
         <group position={[-0.76, 2.77, -0.2]}>
           <mesh geometry={nodes.Cube003_0.geometry} material={materials['colonne-beton.001']} />
         </group>
-        {/* <group position={[4.76, 1.46, 0.76]}>
+        <group position={[4.76, 1.46, 0.76]}>
           <mesh geometry={nodes.Cube004_0.geometry} material={materials['poutre-toit.001']} />
-        </group> */}
-        {/* <group position={[4.76, 1.46, 1.07]} rotation={[0.12, 0, 0]}>
+        </group>
+        <group position={[4.76, 1.46, 1.07]} rotation={[0.12, 0, 0]}>
           <mesh geometry={nodes.Plane001_0.geometry} material={materials['toiture-tole']} />
-        </group> */}
-        {/* <group position={[4.76, 1.46, 1.07]} rotation={[-0.14, 0, 0]}>
+        </group>
+        <group position={[4.76, 1.46, 1.07]} rotation={[-0.14, 0, 0]}>
           <mesh geometry={nodes.Plane006_0.geometry} material={materials['toiture-tole.001']} />
-        </group> */}
+        </group>
         <group position={[0.64, -0.03, 0.88]}>
           <mesh geometry={nodes.Cube005_0.geometry} material={materials['poutre-toit.002']} />
         </group>
-        <group position={[0.64, 2.85, 0.89]} >
+        <group position={[0.64, 2.85, 0.89]}>
           <mesh geometry={nodes.Cube006_0.geometry} material={materials['poutre-toit.003']} />
         </group>
         <group position={[-2.23, -1.44, 1.53]} rotation={[0.99, -0.21, 1.22]} />
@@ -88,7 +88,7 @@ export default function Warehouse({ ...props }) {
         <group position={[2.09, 1.85, -0.78]} rotation={[-1.56, 0.83, 3.14]} scale={0.05}>
           <mesh geometry={nodes.Plane009_0.geometry} material={materials.chaise} />
         </group>
-        <group position={[1.63, 2.1, -0.78]} rotation={[-1.41, -1.17, -1.42]} scale={.05}>
+        <group position={[1.63, 2.1, -0.78]} rotation={[-1.41, -1.17, -1.42]} scale={0.05}>
           <mesh geometry={nodes.Plane010_0.geometry} material={materials.chaise} />
         </group>
         <group position={[-0.8, 2.51, 0.74]}>
@@ -125,11 +125,11 @@ export default function Warehouse({ ...props }) {
           <mesh geometry={nodes.Circle007_0.geometry} material={materials.lampe} />
           <mesh geometry={nodes.Circle007_1.geometry} material={materials['lampe-interieure']} />
         </group>
-        <group position={[4.19, 2.51, 0.41]} rotation={[-0.05, 0.05, -2.05]} scale={.09}>
+        <group position={[4.19, 2.51, 0.41]} rotation={[-0.05, 0.05, -2.05]} scale={0.09}>
           <mesh geometry={nodes.Circle008_0.geometry} material={materials.lampe} />
           <mesh geometry={nodes.Circle008_1.geometry} material={materials['lampe-interieure']} />
         </group>
-        <group position={[-1.23, -0.04, -0.53]} rotation={[Math.PI / 2, 0, 0]} scale={1.64}>
+        <group position={[-1.23, -0.04, -0.53]} rotation={[Math.PI / 2, 0, 0]} scale={0.64}>
           <mesh geometry={nodes.pandagun_1280_0.geometry} material={materials.pandagun_1280} />
         </group>
         <group position={[-1.19, -0.04, 0.08]} rotation={[-Math.PI / 2, 0, -Math.PI]} scale={0.52}>

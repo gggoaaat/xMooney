@@ -3229,7 +3229,7 @@
   ],
   "images": [
     {
-      "uri": "textures/gravas_diffuse.png"
+      "uri": "textures/gravas_diffuse.jpeg"
     },
     {
       "uri": "textures/gravas_specularGlossiness.png"
@@ -3262,7 +3262,7 @@
       "uri": "textures/TexturesCom_DoorsRollup0044_M_diffuse.png"
     },
     {
-      "uri": "textures/fenetre.006_diffuse.png"
+      "uri": "textures/fenetre.006_diffuse.jpeg"
     },
     {
       "uri": "textures/fenetre.006_specularGlossiness.png"
@@ -3304,13 +3304,13 @@
       "uri": "textures/briques-ss-fenetre_diffuse.png"
     },
     {
-      "uri": "textures/fenetre.004_diffuse.png"
+      "uri": "textures/fenetre.004_diffuse.jpeg"
     },
     {
       "uri": "textures/fenetre.004_specularGlossiness.png"
     },
     {
-      "uri": "textures/fenetre.002_diffuse.png"
+      "uri": "textures/fenetre.002_diffuse.jpeg"
     },
     {
       "uri": "textures/fenetre.002_specularGlossiness.png"
