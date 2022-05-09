@@ -99,12 +99,12 @@ export default function ThreeNew() {
     function Sphere(props) {
 
         let sphereMaterial = getMaterial({ type: "lambert", color: "rgb(10, 50, 80)" })
-        let sphere = getSphere([3, 24, 24], null)
+        let sphere = GetSphere([3, 24, 24], null)
 
         // console.log("SPhere")
         // console.log(sphere)
 
-        return renderMeshObject(props, [sphereMaterial, sphere])
+        return RenderMeshObject(props, [sphereMaterial, sphere])
     }
 
     function Plane(props) {
@@ -120,9 +120,9 @@ export default function ThreeNew() {
             metalness: props.metalness,
             roughness: props.roughness
         });
-        let plane = getPlane([props.width, props.height], null)
+        let plane = GetPlane([props.width, props.height], null)
 
-        return renderMeshObject(props, [planeMaterial, plane])
+        return RenderMeshObject(props, [planeMaterial, plane])
     }
 
     function TimeofDay() {
@@ -145,17 +145,17 @@ export default function ThreeNew() {
 
             return (<>
 
-                <LightBulb 
+                <LightBulb
                     intensity={0.30}
-                    runCircularAnimation={{ enabled: true, speed: 0.01, interval: 0, x: 150, y: -100, radius: 20 }} 
-                    position={[values.lb1X, values.lb1Y, values.lb1Z]} 
-                    size={[3, 30, 150]} 
-                    color={"#F4FDFF"}    
+                    runCircularAnimation={{ enabled: true, speed: 0.01, interval: 0, x: 150, y: -100, radius: 20 }}
+                    position={[values.lb1X, values.lb1Y, values.lb1Z]}
+                    size={[3, 30, 150]}
+                    color={"#F4FDFF"}
                 />
-                <LightBulb 
+                <LightBulb
                     intensity={1}
-                    runCircularAnimation={{ enabled: true, speed: 0.01, interval: 0, x: 150, y: 150, z: 120, radius: 20 }} 
-                    position={[values.lb2X, values.lb2Y, values.lb2Z]} 
+                    runCircularAnimation={{ enabled: true, speed: 0.01, interval: 0, x: 150, y: 150, z: 120, radius: 20 }}
+                    position={[values.lb2X, values.lb2Y, values.lb2Z]}
                     size={[5, 30, 10]} />
                 {/* <Cloud scale={100} position={[-20, 60, -20]}></Cloud> */}
                 <Stars></Stars>
@@ -203,7 +203,7 @@ export default function ThreeNew() {
         return selectedMaterial;
     }
 
-    function getPlane(props) {
+    function GetPlane(props) {
 
         const planeBufferGeometry = useRef();
 
@@ -215,7 +215,7 @@ export default function ThreeNew() {
         return (<planeBufferGeometry args={props}></planeBufferGeometry>)
     }
 
-    function getSphere(props) {
+    function GetSphere(props) {
         const sphereBufferGeometry = useRef();
 
         console.log("sphereBufferGeometry");
@@ -226,7 +226,7 @@ export default function ThreeNew() {
         return (<sphereBufferGeometry ref={sphereBufferGeometry} args={props}></sphereBufferGeometry>)
     }
 
-    function renderMeshObject(props, objects) {
+    function RenderMeshObject(props, objects) {
         const mesh = useRef();
 
         console.log("mesh")
@@ -248,8 +248,9 @@ export default function ThreeNew() {
     function LightBulb(props) {
         const mesh = useRef();
 
-        if (props.runCircularAnimation && props.runCircularAnimation.enabled) {
-            useFrame(({ clock }) => {
+
+        useFrame(({ clock }) => {
+            if (props.runCircularAnimation && props.runCircularAnimation.enabled) {
                 let thisValue = clock.getElapsedTime() * (Math.PI * .5)
                 //console.log(thisValue)
 
@@ -264,8 +265,9 @@ export default function ThreeNew() {
                 if (props.runCircularAnimation.y) {
                     mesh.current.position.y = props.runCircularAnimation.y * Math.sin(props.runCircularAnimation.interval) + props.runCircularAnimation.radius // Math.PI * (mesh.current.position.z * (.001))
                 }
-            })
-        }
+            }
+        })
+
 
         return (
             <mesh ref={mesh} {...props} >
@@ -320,7 +322,7 @@ export default function ThreeNew() {
                         enablePan={false}
                         maxP
                     />
-                    <Warehouse  receiveShadow={false} scale={[3, 3, 3]} position={[0, (2.95*3)-.1, 80]}></Warehouse>              
+                    <Warehouse receiveShadow={false} scale={[3, 3, 3]} position={[0, (2.95 * 3) - .1, 80]}></Warehouse>
                 </group>
             </>
         );
