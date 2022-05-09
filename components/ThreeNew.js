@@ -5,20 +5,21 @@ import {
     Canvas,
     useFrame,
     useLoader,
-    Camera
+    // Camera
 } from "@react-three/fiber";
 import { TextureLoader } from 'three/src/loaders/TextureLoader'
-import { Group } from "three";
-import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
+// import { Group } from "three";
+// import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 import Box from "./assets/Box";
 //import OrbitControls from "../components/OrbitControls";
 // import LightBulb from "./assets/Light";
 import Floor from "./assets/Floor";
-import { useAnimations, Html, useProgress, useFBX, Cloud, Stars, Sky, Image, Cylinder, OrbitControls, Environment, useGLTF, Float, TransformControls, QuadraticBezierLine, Backdrop, ContactShadows } from '@react-three/drei'
-import five from "./assets/five.png";
-import Draggable from "./Draggable";
-import { cookieStorageManager, position } from '@chakra-ui/react';
-import { WebGL1Renderer } from 'three';
+//import { useAnimations, Html, useProgress, useFBX, Cloud, Stars, Sky, Image, Cylinder, OrbitControls, Environment, useGLTF, Float, TransformControls, QuadraticBezierLine, Backdrop, ContactShadows } from '@react-three/drei'
+import { useAnimations, Html, useProgress, useFBX, Sky, OrbitControls } from '@react-three/drei'
+// import five from "./assets/five.png";
+// import Draggable from "./Draggable";
+// import { cookieStorageManager, position } from '@chakra-ui/react';
+// import { WebGL1Renderer } from 'three';
 import Warehouse from "../components/assets/Warehouse";
 // import { Camera } from 'three';
 // import AsicMiner from "./assets/AsicMiner";
@@ -238,7 +239,7 @@ export default function ThreeNew() {
                     position={[values.lb2X, values.lb2Y, values.lb2Z]}
                     size={[5, 30, 10]} />
                 {/* <Cloud scale={100} position={[-20, 60, -20]}></Cloud> */}
-                <Stars></Stars>
+                {/* <Stars></Stars> */}
             </>)
         }
     }
