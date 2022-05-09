@@ -4,20 +4,23 @@ import * as THREE from "three";
 import {
     Canvas,
     useFrame,
-    useLoader
+    useLoader,
+    Camera
 } from "@react-three/fiber";
 import { TextureLoader } from 'three/src/loaders/TextureLoader'
 import { Group } from "three";
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 import Box from "./assets/Box";
 //import OrbitControls from "../components/OrbitControls";
 // import LightBulb from "./assets/Light";
 import Floor from "./assets/Floor";
-import { Cloud, Stars, Sky, Image, Cylinder, OrbitControls, Environment, useGLTF, Float, TransformControls, QuadraticBezierLine, Backdrop, ContactShadows } from '@react-three/drei'
+import { useAnimations, Html, useProgress, useFBX, Cloud, Stars, Sky, Image, Cylinder, OrbitControls, Environment, useGLTF, Float, TransformControls, QuadraticBezierLine, Backdrop, ContactShadows } from '@react-three/drei'
 import five from "./assets/five.png";
 import Draggable from "./Draggable";
-import { cookieStorageManager } from '@chakra-ui/react';
+import { cookieStorageManager, position } from '@chakra-ui/react';
 import { WebGL1Renderer } from 'three';
 import Warehouse from "../components/assets/Warehouse";
+// import { Camera } from 'three';
 // import AsicMiner from "./assets/AsicMiner";
 // import GpuMiner from "./assets/GpuMiner";
 // import Shelf from "./assets/Shelf";
@@ -27,7 +30,76 @@ import Warehouse from "../components/assets/Warehouse";
 
 export default function ThreeNew() {
 
-    // const [lotsVars, setLotsVars] = useState({});
+    function Loader() {
+        const { progress } = useProgress()
+        return (<Html center>{progress} % loaded</Html>)
+    }
+
+    const [action, setAction] = useState("Run Forward");
+
+    function CharacterFBX(props) {
+        let fbx = useFBX('/zombie/mremireh_o_desbiens.fbx')
+
+        const primitive = useRef()
+
+        let fbx1 = useFBX('/zombie/walk.fbx')
+        // fbx1.add(useLoader(FBXLoader, '/zombie/run.fbx'))
+        // fbx1.add(useLoader(FBXLoader, '/zombie/idle.fbx'))
+        // fbx1.add(useLoader(FBXLoader, '/zombie/hiphop.fbx'))
+        // fbx1.add(useLoader(FBXLoader, '/zombie/dance.fbx'))
+
+        const { animations } = fbx1;
+        
+        const { actions, names } = useAnimations(animations, fbx)
+
+        console.log(useAnimations(animations, fbx))
+
+        console.log("Animation")
+        console.log(actions)
+        console.log(names)
+        useEffect(() => {
+            actions[names[names.length-1]].play();
+        });
+
+        let direction = "Up"        
+        useFrame(({ clock }) => {
+       
+            const speed = .1
+            
+            if(primitive.current.position.z <= 75 && direction == "Up")
+            {
+                primitive.current.position.z += speed
+            }            
+            else if(primitive.current.position.z >= -75 && direction == "Down")
+            {
+                primitive.current.position.z -=speed
+            }
+            else if(primitive.current.position.z > 75)
+            {
+                direction = "Down"
+                primitive.current.rotation.y = Math.PI/1
+                primitive.current.position.z -= speed
+            }
+            else if(primitive.current.position.z < -75)
+            {
+                direction = "Up"
+                primitive.current.rotation.y = 0
+                primitive.current.position.z += speed
+            }
+            
+            console.log(primitive.current)    
+        })
+
+        // useFrame((state, delta) => {
+        //     group.current.translateZ(-0.02)
+        //   })
+        // useEffect(() => {
+        //     actions.Walk?.play()
+        //     return actions.Walk?.reset()
+        // }, [])
+
+        return (<><primitive ref={primitive} object={fbx} dispose={null} {...props} /></>)
+    }   
 
     let lotsVars = {}
 
@@ -45,9 +117,17 @@ export default function ThreeNew() {
         showLightbulb: true,
         showBall: false,
         showCube: false,
+        character : folder(
+            {
+                chx: { value: 5, min: -90, max: 90, step: 0.1 },
+                chy: { value: 5, min: 6, max: 70, step: 0.1 },
+                chz: { value: 5, min: -90, max: 90, step: 0.1 }
+            },
+            { render: (get) => get('showBall') }
+        ),
         ball: folder(
             {
-                bx: { value: 5, min: -90, max: 90, step: 0.1 },
+                bx: { value: 55, min: -90, max: 90, step: 0.1 },
                 by: { value: 5, min: 6, max: 70, step: 0.1 },
                 bz: { value: 5, min: -90, max: 90, step: 0.1 }
             },
@@ -55,9 +135,9 @@ export default function ThreeNew() {
         ),
         cube: folder(
             {
-                cx: { value: 5, min: -90, max: 90, step: 0.1 },
+                cx: { value: -55, min: -90, max: 90, step: 0.1 },
                 cy: { value: 5, min: 5, max: 70, step: 0.1 },
-                cz: { value: 5, min: -90, max: 90, step: 0.1 }
+                cz: { value: 55, min: -90, max: 90, step: 0.1 }
             },
             { render: (get) => get('showCube') }
         ),
@@ -223,7 +303,7 @@ export default function ThreeNew() {
 
         sphereBufferGeometry.displayName = props.displayName;
 
-        return (<sphereBufferGeometry ref={sphereBufferGeometry} args={props}></sphereBufferGeometry>)
+        return (<sphereBufferGeometry key={props.displayName} ref={sphereBufferGeometry} args={props}></sphereBufferGeometry>)
     }
 
     function RenderMeshObject(props, objects) {
@@ -247,7 +327,6 @@ export default function ThreeNew() {
 
     function LightBulb(props) {
         const mesh = useRef();
-
 
         useFrame(({ clock }) => {
             if (props.runCircularAnimation && props.runCircularAnimation.enabled) {
@@ -286,7 +365,7 @@ export default function ThreeNew() {
             <>
                 <group position={[values.x, values.y, values.z]} scale="1">
                     <TimeofDay ></TimeofDay>
-                    {/* <Box receiveShadow={true} position={[values.cx, values.cy, values.cz]} size={[10, 10, 10]} /> */}
+                    <Box receiveShadow={true} position={[values.cx, values.cy, values.cz]} size={[10, 10, 10]} />
                     <Sphere
                         name={"Sphere_Ball"}
                         displayName={"Sphere_Ball"}
@@ -295,6 +374,7 @@ export default function ThreeNew() {
                         scale={2}
                         receiveShadow={false}
                     ></Sphere>
+                    <CharacterFBX scale={.03} position={[-20, 0, 0]} rotation={[0,0,0]}></CharacterFBX>                    
                     <Plane name={"Plane_Ground"}
                         displayName={"Plane_Ground"}
                         receiveShadow={true}
@@ -363,6 +443,12 @@ export default function ThreeNew() {
 
     return (
         <div className="scene" id="theScene">
+            <div className="controls">
+                <button onClick={() => setAction("Run Forward")}>Run Forward</button>
+                <button onClick={() => setAction("Death")}>Death</button>
+                <button onClick={() => setAction("Draw Arrow")}>Draw Arrow</button>
+                <button onClick={() => setAction("Standing Idle")}>Idle</button>
+            </div>
             <Canvas
                 shadows={true}
                 className="canvas"
@@ -371,9 +457,10 @@ export default function ThreeNew() {
                     position: [100, 60, 75]
                 }}
             >
-                <Suspense fallback={null}>
-                    <LoadEnvironment />
-                    <Box receiveShadow={true} position={[80, 15, -80]} size={[20, 20, 20]} rotation={[0, Math.PI / 2.9, 0]} color="white" image="/xMooney_Logo_Token_1000px_x_1000px.png" />
+                {/* <Camera></Camera> */}
+                <Suspense fallback={<Loader />}>
+                    <LoadEnvironment />                    
+                    {/* <Box receiveShadow={true} position={[80, 15, -80]} size={[20, 20, 20]} rotation={[0, Math.PI / 2.9, 0]} color="white" image="/xMooney_Logo_Token_1000px_x_1000px.png" /> */}
                     {/* <GetSpotLight
                         intensity={values.intensity}
                         castShadow={true}
