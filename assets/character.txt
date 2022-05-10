@@ -57,3 +57,33 @@
 
     //     return (<><primitive ref={primitive} object={fbx} dispose={null} {...props} /></>)
     // }
+
+
+
+
+
+
+
+
+
+
+
+
+//Updown Movement
+
+    // if (primitive.current.position.z <= 75 && direction == "Up") {
+            //     primitive.current.position.z += speed
+            // }
+            // else if (primitive.current.position.z >= -75 && direction == "Down") {
+            //     primitive.current.position.z -= speed
+            // }
+            // else if (primitive.current.position.z > 75) {
+            //     direction = "Down"
+            //     primitive.current.rotation.y = Math.PI / 1
+            //     primitive.current.position.z -= speed
+            // }
+            // else if (primitive.current.position.z < -75) {
+            //     direction = "Up"
+            //     primitive.current.rotation.y = 0
+            //     primitive.current.position.z += speed
+            // }

@@ -81,9 +81,7 @@ export default function ThreeNew() {
             mixer?.update(delta)
             const speed = .1
             mixer.clipAction(model.animations[lastanimation]).fadeOut()
-            if (keys.pressed('ArrowUp')) {
-            // if (keys['ArrowUp'].pressed) {
-                // true while space key is pressed              
+            if (keys.pressed('ArrowUp')) {             
 
                 primitive.current.position.z += speed
                 primitive.current.rotation.y = 0;
@@ -103,9 +101,7 @@ export default function ThreeNew() {
                 
             }
             else if (keys.pressed('ArrowDown')) {
-            // else if (keys['ArrowDown'].pressed) {
-                // true while space key is pressed          
-                // mixer.clipAction(model.animations[3]).play()    
+
                 primitive.current.position.z -= speed;
                 primitive.current.rotation.y = Math.PI / 1
                 mixer.clipAction(model.animations[3]).play().fadeIn()
@@ -120,46 +116,23 @@ export default function ThreeNew() {
                 }                               
             }
             else if (keys.pressed('ArrowLeft')) {
-            // else if (keys['ArrowLeft'].pressed) {
-                // mixer.clipAction(model.animations[3]).play()
-                // true while space key is pressed              
+         
                 primitive.current.position.x += speed;
                 primitive.current.rotation.y = Math.PI / 2
                 mixer.clipAction(model.animations[3]).play().fadeIn()
                 lastanimation = 3
             }
             else if (keys.pressed('ArrowRight')) {
-            // else if (keys['ArrowRight'].pressed) {
-                // true while space key is pressed  
-                // mixer.clipAction(model.animations[3]).play()               
+            
                 primitive.current.position.x -= speed;
                 primitive.current.rotation.y = (3 * Math.PI) / 2
                 mixer.clipAction(model.animations[3]).play().fadeIn()
                 lastanimation = 3
             }
-            // else if (keys['a'].pressed) {
-            //     mixer.clipAction(model.animations[2]).play()
-            // }
             else {
-                mixer.stopAllAction()
-            }
-
-            // if (primitive.current.position.z <= 75 && direction == "Up") {
-            //     primitive.current.position.z += speed
-            // }
-            // else if (primitive.current.position.z >= -75 && direction == "Down") {
-            //     primitive.current.position.z -= speed
-            // }
-            // else if (primitive.current.position.z > 75) {
-            //     direction = "Down"
-            //     primitive.current.rotation.y = Math.PI / 1
-            //     primitive.current.position.z -= speed
-            // }
-            // else if (primitive.current.position.z < -75) {
-            //     direction = "Up"
-            //     primitive.current.rotation.y = 0
-            //     primitive.current.position.z += speed
-            // }
+                mixer.clipAction(model.animations[2]).play().fadeIn()
+                // mixer.stopAllAction()
+            }            
 
             // console.log(primitive.current)
         })
