@@ -1,0 +1,8 @@
+Model Information:
+* title:	Spider Robot dirty PBR
+* source:	https://sketchfab.com/3d-models/spider-robot-dirty-pbr-9c019933613d433abd421ebe47ea04d8
+* author:	ArnoldE (https://sketchfab.com/arnoldescorcia906)
+
+Model License:
+* license type:	SKETCHFAB Standard (https://sketchfab.com/licenses)
+* requirements:	Under basic restrictions, use worldwide, on all types of media, commercially or not, and in all types of derivative works

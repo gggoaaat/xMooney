@@ -28,9 +28,12 @@
     "react-dom": "18.0.0",
     "react-moment": "^1.1.2",
     "react-moralis": "^1.3.5",
+    "react-swipeable": "^7.0.0",
     "react-table": "^7.7.0",
     "react-time-ago": "^7.1.9",
+    "styled-components": "^5.3.5",
     "three": "^0.140.0",
+    "use-key-state": "^0.1.9",
     "web3": "^1.7.3",
     "zustand": "^4.0.0-rc.1"
   },

@@ -1,0 +1,59 @@
+   // function CharacterFBX(props) {
+    //     let fbx = useFBX('/zombie/mremireh_o_desbiens.fbx')
+
+    //     const primitive = useRef()
+
+    //     let fbx1 = useFBX('/zombie/walk.fbx')
+    //     // fbx1.add(useLoader(FBXLoader, '/zombie/run.fbx'))
+    //     // fbx1.add(useLoader(FBXLoader, '/zombie/idle.fbx'))
+    //     // fbx1.add(useLoader(FBXLoader, '/zombie/hiphop.fbx'))
+    //     // fbx1.add(useLoader(FBXLoader, '/zombie/dance.fbx'))
+
+    //     const { animations } = fbx1;
+
+    //     const { actions, names } = useAnimations(animations, fbx)
+
+    //     console.log(useAnimations(animations, fbx))
+
+    //     console.log("Animation")
+    //     console.log(actions)
+    //     console.log(names)
+    //     useEffect(() => {
+    //         actions[names[names.length - 1]].play();
+    //     });
+
+    //     let direction = "Up"
+    //     useFrame(({ clock }) => {
+
+    //         const speed = .1
+
+    //         if (primitive.current.position.z <= 75 && direction == "Up") {
+    //             primitive.current.position.z += speed
+    //         }
+    //         else if (primitive.current.position.z >= -75 && direction == "Down") {
+    //             primitive.current.position.z -= speed
+    //         }
+    //         else if (primitive.current.position.z > 75) {
+    //             direction = "Down"
+    //             primitive.current.rotation.y = Math.PI / 1
+    //             primitive.current.position.z -= speed
+    //         }
+    //         else if (primitive.current.position.z < -75) {
+    //             direction = "Up"
+    //             primitive.current.rotation.y = 0
+    //             primitive.current.position.z += speed
+    //         }
+
+    //         console.log(primitive.current)
+    //     })
+
+    //     // useFrame((state, delta) => {
+    //     //     group.current.translateZ(-0.02)
+    //     //   })
+    //     // useEffect(() => {
+    //     //     actions.Walk?.play()
+    //     //     return actions.Walk?.reset()
+    //     // }, [])
+
+    //     return (<><primitive ref={primitive} object={fbx} dispose={null} {...props} /></>)
+    // }
