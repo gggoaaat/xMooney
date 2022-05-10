@@ -6,7 +6,8 @@ import {
     Canvas,
     useFrame,
     useLoader,
-    // Camera
+    useThree,
+    Camera
 } from "@react-three/fiber";
 import { TextureLoader } from 'three/src/loaders/TextureLoader'
 // import { Group } from "three";
@@ -16,7 +17,7 @@ import Box from "./assets/Box";
 // import LightBulb from "./assets/Light";
 import Floor from "./assets/Floor";
 //import { useGLTF, useAnimations, Html, useProgress, useFBX, Cloud, Stars, Sky, Image, Cylinder, OrbitControls, Environment, useGLTF, Float, TransformControls, QuadraticBezierLine, Backdrop, ContactShadows } from '@react-three/drei'
-import { useGLTF, useAnimations, Html, useProgress, useFBX, Sky, OrbitControls } from '@react-three/drei'
+import { PerspectiveCamera, useGLTF, useAnimations, Html, useProgress, useFBX, Sky, OrbitControls } from '@react-three/drei'
 import {
     GLTFLoader
 } from 'three/examples/jsm/loaders/GLTFLoader';
@@ -35,11 +36,30 @@ import Keyboard from "../components/keyboard";
 // import Ship from "./assets/Ship";
 import { useKeyState } from 'use-key-state'
 import { useSwipeable } from 'react-swipeable';
+import { useRaribleLazyMint } from 'react-moralis';
+import { Vector3 } from 'three';
+// import { Camera } from 'three';
 
 
 
 
 export default function ThreeNew() {
+
+    const cameraWrap = useRef();
+    const defaultCamera = useRef();
+    const robotRef = useRef();
+    const canvasRef = useRef()
+    const cameraAndBotWrap = useRef()
+    const environmentWrap = useRef()
+
+    // function Camera(props) {
+    //     const ref = useRef()
+    //     const { setDefaultCamera } = useThree()
+    //     // This makes sure that size-related calculations are proper
+    //     // Every call to useThree will return this camera instead of the default camera 
+    //     useEffect(() => void setDefaultCamera(ref.current), [])
+    //     return <perspectiveCamera ref={camera} {...props} />
+    // }
 
     function Loader() {
         const { progress } = useProgress()
@@ -49,113 +69,12 @@ export default function ThreeNew() {
     // const [action, setAction] = useState("Run Forward");
 
     const keys = useKeyState().keyStateQuery
-   
-    function Robot(props) {
 
-        const primitive = useRef()
-        const model = useLoader(
-            GLTFLoader,
-            '/robot2/scene.gltf'
-        )
+    let cameraValues = [0, 0, 0]
 
-        // Here's the animation part
-        // ************************* 
-        let mixer
-        controlAnimation(2);
+    const OrbitControlsRef = useRef()
+    const primitiveBot = useRef()
 
-        function controlAnimation(animation) {
-            if (model.animations.length) {
-                mixer = new THREE.AnimationMixer(model.scene);
-                console.log("mixer");
-                console.log(mixer);
-                // model.animations.forEach(clip => {
-                //     const action = mixer.clipAction(clip)
-                //     action.play();
-                // });
-                mixer.clipAction(model.animations[animation]).play();
-            }
-        }
-
-        let lastanimation = 2
-        useFrame((state, delta) => {
-            mixer?.update(delta)
-            const speed = .1
-            mixer.clipAction(model.animations[lastanimation]).fadeOut()
-            if (keys.pressed('ArrowUp')) {             
-
-                primitive.current.position.z += speed
-                primitive.current.rotation.y = 0;
-                
-                mixer.clipAction(model.animations[3]).play().fadeIn()
-                lastanimation = 3
-                if (keys.pressed('ArrowLeft')) {
-                    primitive.current.position.x += speed;
-                    primitive.current.rotation.y = Math.PI /180 * 45
-                } 
-
-                if (keys.pressed('ArrowRight')) {
-                    primitive.current.position.x -= speed;
-                    primitive.current.rotation.y = (Math.PI*3)/180 * 225
-                }   
-                
-                
-            }
-            else if (keys.pressed('ArrowDown')) {
-
-                primitive.current.position.z -= speed;
-                primitive.current.rotation.y = Math.PI / 1
-                mixer.clipAction(model.animations[3]).play().fadeIn()
-                lastanimation = 3
-                if (keys.pressed('ArrowLeft')) {
-                    primitive.current.position.x += speed;
-                    primitive.current.rotation.y = (3*Math.PI)/180 * 45
-                } 
-                if (keys.pressed('ArrowRight')) {
-                    primitive.current.position.x -= speed;
-                    primitive.current.rotation.y = (Math.PI /180 * 225)   
-                }                               
-            }
-            else if (keys.pressed('ArrowLeft')) {
-         
-                primitive.current.position.x += speed;
-                primitive.current.rotation.y = Math.PI / 2
-                mixer.clipAction(model.animations[3]).play().fadeIn()
-                lastanimation = 3
-            }
-            else if (keys.pressed('ArrowRight')) {
-            
-                primitive.current.position.x -= speed;
-                primitive.current.rotation.y = (3 * Math.PI) / 2
-                mixer.clipAction(model.animations[3]).play().fadeIn()
-                lastanimation = 3
-            }
-            else {
-                mixer.clipAction(model.animations[2]).play().fadeIn()
-                // mixer.stopAllAction()
-            }            
-
-            // console.log(primitive.current)
-        })
-        // *************************
-
-        model.scene.traverse(child => {
-            if (child.isMesh) {
-                child.castShadow = true
-                child.receiveShadow = true
-                child.material.side = THREE.FrontSide
-            }
-        })
-
-        return (
-            <primitive
-                ref={primitive}
-                object={model.scene}
-                {...props}
-            />
-        )
-
-
-    }
 
     let lotsVars = {}
 
@@ -413,13 +332,248 @@ export default function ThreeNew() {
         );
     }
 
-    function LoadEnvironment() {
+    function Robot(props) {
 
-        var loader = new THREE.TextureLoader();
+        const model = useLoader(
+            GLTFLoader,
+            '/robot2/scene.gltf'
+        )
+
+        // Here's the animation part
+        // ************************* 
+        let mixer
+        controlAnimation(2);
+        let _currentPosition = new THREE.Vector3();
+        let _currentLookat = new THREE.Vector3();
+
+        function controlAnimation(animation) {
+            if (model.animations.length) {
+                mixer = new THREE.AnimationMixer(model.scene);
+                console.log("mixer");
+                console.log(mixer);
+                // model.animations.forEach(clip => {
+                //     const action = mixer.clipAction(clip)
+                //     action.play();
+                // });
+                mixer.clipAction(model.animations[animation]).play();
+            }
+        }
+
+        let lastanimation = 2
+        function _CalculateIdealOffset(object) {
+            const idealOffset = new THREE.Vector3(-15, 20, -30);
+            idealOffset.applyQuaternion(new THREE.Quaternion(object.position.x, object.position.y, object.position.z, 1));
+            idealOffset.add(object.position);
+            return idealOffset;
+        }
+
+        function _CalculateIdealLookat(object) {
+            const idealLookat = new THREE.Vector3(0, 10, 50);
+            idealLookat.applyQuaternion(new THREE.Quaternion(object.position.x, object.position.y, object.position.z, 1));
+            idealLookat.add(object.position);
+            return idealLookat;
+        }
+
+
+        useThree(({ camera }) => {
+            if (primitiveBot.current)
+                camera.rotation.set(primitiveBot.current.position.x, primitiveBot.current.position.y, primitiveBot.current.position.z);
+        });
+
+        useFrame((state, delta) => {
+            mixer?.update(delta)
+            const speed = .5
+            const pivotSpeed = .05
+            mixer.clipAction(model.animations[lastanimation]).fadeOut()
+            const idealOffset = _CalculateIdealOffset(primitiveBot.current);
+            const idealLookat = _CalculateIdealLookat(primitiveBot.current);
+            // const t = 0.05;
+            // const t = 4.0 * timeElapsed;
+            const t = 1.0 - Math.pow(0.001, state.clock.elapsedTime);
+            // this._camera.position.copy(this._currentPosition);
+            // this._camera.lookAt(this._currentLookat);
+            // console.log(canvasRef.current.camera)
+            _currentPosition.lerp(idealOffset, t);
+            _currentLookat.lerp(idealLookat, t)
+            // state.camera.position = _currentPosition
+            // state.camera.lookAt(this._currentLookat);
+
+            console.log(_currentPosition)
+            // OrbitControlsRef.position = _currentPosition
+            let x1 = cameraAndBotWrap.current.position.x - 10
+            let z1 = cameraAndBotWrap.current.position.z + 52
+
+            // environmentWrap.current.rotate.x -= 1
+
+            defaultCamera.current.lookAt(new THREE.Vector3(x1, 1, z1))
+            // defaultCamera.current.lookAt( primitiveBot.current.position)
+            //OrbitControlsRef.current.lookAt.x = primitiveBot.current
+            // OrbitControlsRef.current.target = new THREE.Vector3(x1, 1, z1)
+            // OrbitControlsRef.current.target = cameraAndBotWrap.current.position
+            // console.log("LookAt")
+            // console.log(OrbitControlsRef.current.target)
+            let thisParams = { enabled: true, speed: 11, interval: 0, x: 150, y: -100, radius: 20 };
+            let dualpress = false;
+            if (keys.pressed('ArrowUp')) {
+                mixer.clipAction(model.animations[3]).play().fadeIn()
+                lastanimation = 3
+                if (keys.pressed('ArrowLeft')) {
+                    // cameraWrap.current.position.x += speed;
+                    // cameraWrap.current.rotation.x =  cameraWrap.current.position.x -= (1 * Math.PI) / 180 * 45 //primitiveBot.current.position.x * Math.cos(0) + 1
+                    //cameraAndBotWrap.current.position.x += speed;
+                    // cameraAndBotWrap.current.rotation.y = Math.PI / 180 * 45
+                    // environmentWrap.current.position.x = environmentWrap.current.position.x * Math.sin(thisParams.interval) + 0
+                    // // environmentWrap.current.position.y = (cameraAndBotWrap.current.position.y)
+                    // environmentWrap.current.position.z = environmentWrap.current.position.z / Math.cos(thisParams.interval) + 0
+                    environmentWrap.current.rotateY(-pivotSpeed)
+                    // primitiveBot.current.position.x += speed;
+                    // primitiveBot.current.rotation.y = Math.PI / 180 * 45
+                    dualpress = true;
+                }
+
+                if (keys.pressed('ArrowRight')) {
+                    // cameraWrap.current.position.x -= speed;
+                    // primitiveBot.current.position.x -= speed;
+                    // primitiveBot.current.rotation.y = (Math.PI * 3) / 180 * 225
+                    //cameraAndBotWrap.current.position.x -= speed;
+                    // cameraAndBotWrap.current.rotation.y = (Math.PI * 3) / 180 * 225
+                    environmentWrap.current.rotateY(pivotSpeed)
+                    dualpress = true;
+                }
+
+                // thisParams.interval += thisParams.speed;
+                // cameraWrap.current.position.z += speed;                   
+                // cameraWrap.current.rotation.x = primitiveBot.current.position.x * Math.sin(thisParams.interval) + 1
+                // primitiveBot.current.position.z += speed
+                // primitiveBot.current.rotation.y = 0;
+                // cameraAndBotWrap.current.position.z += speed;
+                // environmentWrap.current.position.x += 1
+                if(dualpress == false)
+                environmentWrap.current.position.z -= speed
+                // cameraAndBotWrap.current.rotation.y = 0
+
+                
+
+            }
+            else if (keys.pressed('ArrowDown')) {
+                mixer.clipAction(model.animations[3]).play().fadeIn()
+                lastanimation = 3               
+                if (keys.pressed('ArrowLeft')) {
+                    // cameraWrap.current.position.x += speed;
+                    // primitiveBot.current.position.x += speed;
+                    // primitiveBot.current.rotation.y = (3 * Math.PI) / 180 * 45
+                    environmentWrap.current.rotateY(pivotSpeed)
+                    dualpress = true;
+                }
+                if (keys.pressed('ArrowRight')) {
+                    //   cameraWrap.current.position.x -= speed;
+                    // primitiveBot.current.position.x -= speed;
+                    // primitiveBot.current.rotation.y = (Math.PI / 180 * 225)
+                    environmentWrap.current.rotateY(-pivotSpeed)
+                    dualpress = true
+                }
+                // cameraWrap.current.position.z -= speed;
+                // cameraWrap.current.position.x -= (3 * Math.PI) / 180 * 45 //primitiveBot.current.position.x * Math.sin(thisParams.interval) + 1
+
+                // primitiveBot.current.position.z -= speed;                    
+                // primitiveBot.current.rotation.y = Math.PI / 1
+                // cameraAndBotWrap.current.position.z -= speed;
+                // environmentWrap.current.position.x -= 1
+                if(dualpress == false)
+                environmentWrap.current.position.z += speed
+                // cameraAndBotWrap.current.rotation.y = Math.PI / 1
+
+                
+            }
+            else if (keys.pressed('ArrowLeft')) {
+                //  cameraWrap.current.position.x += speed;
+                // primitiveBot.current.position.x += speed;
+                // primitiveBot.current.rotation.y = Math.PI / 2
+                cameraAndBotWrap.current.position.x += speed;
+                // cameraAndBotWrap.current.rotation.y = Math.PI / 2
+                // environmentWrap.current.rotateY(.005)
+                // /environmentWrap.current.position.x -= 1
+                // environmentWrap.current.position.z += 1
+                mixer.clipAction(model.animations[3]).play().fadeIn()
+                lastanimation = 3
+            }
+            else if (keys.pressed('ArrowRight')) {
+                //  cameraWrap.current.position.x -= speed;
+                // primitiveBot.current.position.x -= speed;
+                // primitiveBot.current.rotation.y = (3 * Math.PI) / 2
+                cameraAndBotWrap.current.position.x -= speed;
+                // cameraAndBotWrap.current.rotation.y = (3 * Math.PI) / 2
+                
+                // environmentWrap.current.position.x += 1
+                // environmentWrap.current.rotateY(-.1)
+                // environmentWrap.current.rotation.y = (3 * Math.PI) / 2
+                mixer.clipAction(model.animations[3]).play().fadeIn()
+                lastanimation = 3
+            }
+            else {
+                mixer.clipAction(model.animations[2]).play().fadeIn()
+                // mixer.stopAllAction()
+            }
+
+            // OrbitControlsRef.current.target.x = primitiveBot.current.position.x
+            // OrbitControlsRef.current.target.y = primitiveBot.current.position.y
+            // OrbitControlsRef.current.target.z = primitiveBot.current.position.z
+
+            // cameraValues = [primitiveBot.current.position.x, 0, primitiveBot.current.position.z]
+            // console.log(primitive.current)
+        })
+        // *************************
+
+        model.scene.traverse(child => {
+            if (child.isMesh) {
+                child.castShadow = true
+                child.receiveShadow = true
+                child.material.side = THREE.FrontSide
+            }
+        })
 
         return (
+            <primitive
+                ref={primitiveBot}
+                object={model.scene}
+                {...props}
+            />
+        )
+
+
+    }
+
+    function CharacterAndCamera(props) {
+        return (<group name="CameraAndBot" ref={cameraAndBotWrap} {...props} dispose={null}>
+            <OrbitControls
+                //[100, 60, 75]
+                //  position={[100, 60, 75]}
+                ref={OrbitControlsRef}
+                target={[0, 0, 0]}
+                // target0={new THREE.Vector3(0, 10, 0)}
+                maxPolarAngle={(Math.PI / 2) * 0.9}
+                autoRotate={false}
+                minDistance={50}
+                maxDistance={300}
+            // enablePan={false}
+
+            />
+            <group name="Camera" ref={cameraWrap} position={[10, 1, 5]} >
+                <PerspectiveCamera ref={defaultCamera} fov={42} makeDefault position={[-15, 10, -30]} rotation={[Math.PI / 4, (Math.PI) / 2 * 90, Math.PI / 4]} />
+            </group>
+            <group position={[0, 0, 0]} rotation={[0, 0, 0]}>
+                <Robot ref={robotRef} scale={20} position={[-20, 5, 0]} rotation={[0, 0, 0]}> </Robot>
+            </group>
+        </group>)
+    }
+
+    function LoadEnvironment(props) {
+
+        var loader = new THREE.TextureLoader();
+        return (
             <>
-                <group position={[values.x, values.y, values.z]} scale="1">
+                <group ref={environmentWrap} position={[values.x, values.y, values.z]} scale="1">
+                <Box receiveShadow={true} position={[5, 10, -8]} size={[10, 10, 10]} rotation={[0, Math.PI / 2.9, 0]} color="white" image="/xMooney_Logo_Token_1000px_x_1000px.png" />
                     <TimeofDay ></TimeofDay>
                     {/* <Box receiveShadow={true} position={[values.cx, values.cy, values.cz]} size={[10, 10, 10]} /> */}
                     <Sphere
@@ -431,7 +585,19 @@ export default function ThreeNew() {
                         receiveShadow={false}
                     ></Sphere>
                     {/* <CharacterFBX scale={.03} position={[-20, 0, 0]} rotation={[0, 0, 0]}></CharacterFBX> */}
-                    <Robot scale={20} position={[-20, 0, 0]} rotation={[0, 0, 0]}></Robot>
+
+
+
+                    {/* <group name="CameraAndBot" ref={cameraAndBotWrap} {...props} dispose={null}>
+                        <group name="Camera" ref={cameraWrap} position={[10, 1, 5]} rotation={[-100, (Math.PI*4/2), 10]}>
+                            <PerspectiveCamera ref={defaultCamera} fov={60}  makeDefault position={[-10, 0, -10]} />
+                        </group>
+                        <group position={[0, 0, 0]} rotation={[0, 0, 0]}>
+                            <Robot ref={robotRef} scale={20} position={[-20, 0, 0]} rotation={[0, 0, 0]}> </Robot>
+                        </group>
+                    </group> */}
+
+
                     <Plane name={"Plane_Ground"}
                         displayName={"Plane_Ground"}
                         receiveShadow={true}
@@ -450,15 +616,7 @@ export default function ThreeNew() {
                         rotation={[Math.PI / 2, 0, 0]}></Plane>
                     {/* <LightBulb position={[10, -1, -50]} /> */}
                     {<Floor color="white" position={[0, -20.1, 0]} size={[10, 2, 10]} scale="20" />}
-                    <OrbitControls
-                        target0={new THREE.Vector3(0, 0, 0)}
-                        maxPolarAngle={(Math.PI / 2) * 0.9}
-                        autoRotate={false}
-                        minDistance={50}
-                        maxDistance={300}
-                        enablePan={false}
-                        maxP
-                    />
+
                     <Warehouse receiveShadow={false} scale={[3, 3, 3]} position={[0, (2.95 * 3) - .1, 80]}></Warehouse>
                 </group>
             </>
@@ -498,26 +656,29 @@ export default function ThreeNew() {
         return (<></>)
     }
 
+
+
     return (
         <div className="scene" id="theScene">
-            {/* <div className="controls">
-                <button onClick={() => setAction("Run Forward")}>Run Forward</button>
-                <button onClick={() => setAction("Death")}>Death</button>
-                <button onClick={() => setAction("Draw Arrow")}>Draw Arrow</button>
-                <button onClick={() => setAction("Standing Idle")}>Idle</button>
-            </div> */}
             <Canvas
                 shadows={true}
+                ref={canvasRef}
                 className="canvas"
 
                 camera={{
-                    position: [100, 60, 75]
+                    position: [-100, 50, -75],
                 }}
             >
+                {/* <Camera position={[0, 0, 10]} /> */}
                 {/* <Camera></Camera> */}
+                {/* <PerspectiveCamera ref={PerspectiveCameraRef} fov={75} position={[100, 50, 20]} /> */}
                 <Suspense fallback={<Loader />}>
+                    {/* <Camera ref={Camera} position={[0, 0, 0]} /> */}
+                    {/* <PerspectiveCamera ref={PerspectiveCameraRef} manual position={[10,20,10]}>
+                    </PerspectiveCamera> */}
+                    <CharacterAndCamera />
                     <LoadEnvironment />
-                    <Box receiveShadow={true} position={[5, 10, -8]} size={[10, 10, 10]} rotation={[0, Math.PI / 2.9, 0]} color="white" image="/xMooney_Logo_Token_1000px_x_1000px.png" />
+                    
                     {/* <GetSpotLight
                         intensity={values.intensity}
                         castShadow={true}
