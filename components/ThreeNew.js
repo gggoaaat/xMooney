@@ -17,7 +17,7 @@ import Box from "./assets/Box";
 // import LightBulb from "./assets/Light";
 import Floor from "./assets/Floor";
 //import { useGLTF, useAnimations, Html, useProgress, useFBX, Cloud, Stars, Sky, Image, Cylinder, OrbitControls, Environment, useGLTF, Float, TransformControls, QuadraticBezierLine, Backdrop, ContactShadows } from '@react-three/drei'
-import { PerspectiveCamera, useGLTF, useAnimations, Html, useProgress, useFBX, Sky, OrbitControls } from '@react-three/drei'
+import { PerspectiveCamera, Stars, useGLTF, useAnimations, Html, useProgress, useFBX, Sky, OrbitControls } from '@react-three/drei'
 import {
     GLTFLoader
 } from 'three/examples/jsm/loaders/GLTFLoader';
@@ -51,6 +51,8 @@ export default function ThreeNew() {
     const canvasRef = useRef()
     const cameraAndBotWrap = useRef()
     const environmentWrap = useRef()
+    const landWrap = useRef()
+
 
     // function Camera(props) {
     //     const ref = useRef()
@@ -85,9 +87,9 @@ export default function ThreeNew() {
 
     const values = useControls({
         intensity: { value: 5, min: 0, max: 20, step: 1 },
-        x: { value: 5, min: -5, max: 15, step: 1 },
-        y: { value: 5, min: -5, max: 15, step: 1 },
-        z: { value: 5, min: -5, max: 15, step: 1 },
+        x: { value: 0, min: -5, max: 15, step: 1 },
+        y: { value: 0, min: -5, max: 15, step: 1 },
+        z: { value: 0, min: -5, max: 15, step: 1 },
         showSpotlight: false,
         showLightbulb: true,
         showBall: false,
@@ -213,7 +215,7 @@ export default function ThreeNew() {
                     position={[values.lb2X, values.lb2Y, values.lb2Z]}
                     size={[5, 30, 10]} />
                 {/* <Cloud scale={100} position={[-20, 60, -20]}></Cloud> */}
-                {/* <Stars></Stars> */}
+                <Stars></Stars>
             </>)
         }
     }
@@ -380,6 +382,7 @@ export default function ThreeNew() {
                 camera.rotation.set(primitiveBot.current.position.x, primitiveBot.current.position.y, primitiveBot.current.position.z);
         });
 
+        let lastRotationY = 0;
         useFrame((state, delta) => {
             mixer?.update(delta)
             const speed = .5
@@ -398,115 +401,79 @@ export default function ThreeNew() {
             // state.camera.position = _currentPosition
             // state.camera.lookAt(this._currentLookat);
 
-            console.log(_currentPosition)
+            //            console.log(_currentPosition)
             // OrbitControlsRef.position = _currentPosition
             let x1 = cameraAndBotWrap.current.position.x - 10
             let z1 = cameraAndBotWrap.current.position.z + 52
 
-            // environmentWrap.current.rotate.x -= 1
+            console.log(environmentWrap.current)
 
-            defaultCamera.current.lookAt(new THREE.Vector3(x1, 1, z1))
-            // defaultCamera.current.lookAt( primitiveBot.current.position)
-            //OrbitControlsRef.current.lookAt.x = primitiveBot.current
-            // OrbitControlsRef.current.target = new THREE.Vector3(x1, 1, z1)
-            // OrbitControlsRef.current.target = cameraAndBotWrap.current.position
-            // console.log("LookAt")
-            // console.log(OrbitControlsRef.current.target)
+
+
+            // defaultCamera.current.lookAt(new THREE.Vector3(x1, 1, z1))
+            defaultCamera.current.lookAt(cameraAndBotWrap.current.position)
+
+            // console.log(environmentWrap.current.position)
+            // console.log(cameraAndBotWrap.current.position)
+           
             let thisParams = { enabled: true, speed: 11, interval: 0, x: 150, y: -100, radius: 20 };
             let dualpress = false;
             if (keys.pressed('ArrowUp')) {
                 mixer.clipAction(model.animations[3]).play().fadeIn()
                 lastanimation = 3
                 if (keys.pressed('ArrowLeft')) {
-                    // cameraWrap.current.position.x += speed;
-                    // cameraWrap.current.rotation.x =  cameraWrap.current.position.x -= (1 * Math.PI) / 180 * 45 //primitiveBot.current.position.x * Math.cos(0) + 1
-                    //cameraAndBotWrap.current.position.x += speed;
-                    // cameraAndBotWrap.current.rotation.y = Math.PI / 180 * 45
-                    // environmentWrap.current.position.x = environmentWrap.current.position.x * Math.sin(thisParams.interval) + 0
-                    // // environmentWrap.current.position.y = (cameraAndBotWrap.current.position.y)
-                    // environmentWrap.current.position.z = environmentWrap.current.position.z / Math.cos(thisParams.interval) + 0
-                    environmentWrap.current.rotateY(-pivotSpeed)
-                    // primitiveBot.current.position.x += speed;
-                    // primitiveBot.current.rotation.y = Math.PI / 180 * 45
+
+                    // cameraAndBotWrap.current.rotateY(-pivotSpeed)
+                    cameraAndBotWrap.current.position.x += speed;
+                    cameraAndBotWrap.current.position.z += speed
+                    cameraAndBotWrap.current.rotation.y = Math.PI / 180 * 45
                     dualpress = true;
                 }
 
                 if (keys.pressed('ArrowRight')) {
-                    // cameraWrap.current.position.x -= speed;
-                    // primitiveBot.current.position.x -= speed;
-                    // primitiveBot.current.rotation.y = (Math.PI * 3) / 180 * 225
-                    //cameraAndBotWrap.current.position.x -= speed;
-                    // cameraAndBotWrap.current.rotation.y = (Math.PI * 3) / 180 * 225
-                    environmentWrap.current.rotateY(pivotSpeed)
+                    // cameraAndBotWrap.current.rotateY(pivotSpeed)
+                    cameraAndBotWrap.current.position.x -= speed;
+                    cameraAndBotWrap.current.position.z += speed
+                    cameraAndBotWrap.current.rotation.y = (Math.PI * 3) / 180 * 225
                     dualpress = true;
                 }
 
-                // thisParams.interval += thisParams.speed;
-                // cameraWrap.current.position.z += speed;                   
-                // cameraWrap.current.rotation.x = primitiveBot.current.position.x * Math.sin(thisParams.interval) + 1
-                // primitiveBot.current.position.z += speed
-                // primitiveBot.current.rotation.y = 0;
-                // cameraAndBotWrap.current.position.z += speed;
-                // environmentWrap.current.position.x += 1
-                if(dualpress == false)
-                environmentWrap.current.position.z -= speed
-                // cameraAndBotWrap.current.rotation.y = 0
-
-                
-
+                if (dualpress == false)
+                    cameraAndBotWrap.current.position.z += speed
+                    cameraAndBotWrap.current.rotation.y = 0
             }
             else if (keys.pressed('ArrowDown')) {
                 mixer.clipAction(model.animations[3]).play().fadeIn()
-                lastanimation = 3               
+                lastanimation = 3
                 if (keys.pressed('ArrowLeft')) {
-                    // cameraWrap.current.position.x += speed;
-                    // primitiveBot.current.position.x += speed;
-                    // primitiveBot.current.rotation.y = (3 * Math.PI) / 180 * 45
-                    environmentWrap.current.rotateY(pivotSpeed)
+                    cameraAndBotWrap.current.position.x += speed;
+                    cameraAndBotWrap.current.position.z -= speed
+                    cameraAndBotWrap.current.rotation.y = (3 * Math.PI) / 180 * 45
                     dualpress = true;
                 }
                 if (keys.pressed('ArrowRight')) {
-                    //   cameraWrap.current.position.x -= speed;
-                    // primitiveBot.current.position.x -= speed;
-                    // primitiveBot.current.rotation.y = (Math.PI / 180 * 225)
-                    environmentWrap.current.rotateY(-pivotSpeed)
+                    // cameraAndBotWrap.current.rotateY(pivotSpeed)
+                    cameraAndBotWrap.current.position.x = speed;
+                    cameraAndBotWrap.current.position.z += speed
+                    cameraAndBotWrap.current.rotation.y = (Math.PI / 180 * 225)
                     dualpress = true
                 }
-                // cameraWrap.current.position.z -= speed;
-                // cameraWrap.current.position.x -= (3 * Math.PI) / 180 * 45 //primitiveBot.current.position.x * Math.sin(thisParams.interval) + 1
 
-                // primitiveBot.current.position.z -= speed;                    
-                // primitiveBot.current.rotation.y = Math.PI / 1
-                // cameraAndBotWrap.current.position.z -= speed;
-                // environmentWrap.current.position.x -= 1
-                if(dualpress == false)
-                environmentWrap.current.position.z += speed
-                // cameraAndBotWrap.current.rotation.y = Math.PI / 1
-
-                
+                if (dualpress == false)
+                    cameraAndBotWrap.current.position.z -= speed
+                    cameraAndBotWrap.current.rotation.y = Math.PI / 1
             }
             else if (keys.pressed('ArrowLeft')) {
-                //  cameraWrap.current.position.x += speed;
-                // primitiveBot.current.position.x += speed;
-                // primitiveBot.current.rotation.y = Math.PI / 2
+
                 cameraAndBotWrap.current.position.x += speed;
-                // cameraAndBotWrap.current.rotation.y = Math.PI / 2
-                // environmentWrap.current.rotateY(.005)
-                // /environmentWrap.current.position.x -= 1
-                // environmentWrap.current.position.z += 1
+                cameraAndBotWrap.current.rotation.y = Math.PI / 2
                 mixer.clipAction(model.animations[3]).play().fadeIn()
                 lastanimation = 3
             }
             else if (keys.pressed('ArrowRight')) {
-                //  cameraWrap.current.position.x -= speed;
-                // primitiveBot.current.position.x -= speed;
-                // primitiveBot.current.rotation.y = (3 * Math.PI) / 2
+
                 cameraAndBotWrap.current.position.x -= speed;
-                // cameraAndBotWrap.current.rotation.y = (3 * Math.PI) / 2
-                
-                // environmentWrap.current.position.x += 1
-                // environmentWrap.current.rotateY(-.1)
-                // environmentWrap.current.rotation.y = (3 * Math.PI) / 2
+                cameraAndBotWrap.current.rotation.y = (3 * Math.PI) / 2
                 mixer.clipAction(model.animations[3]).play().fadeIn()
                 lastanimation = 3
             }
@@ -514,13 +481,6 @@ export default function ThreeNew() {
                 mixer.clipAction(model.animations[2]).play().fadeIn()
                 // mixer.stopAllAction()
             }
-
-            // OrbitControlsRef.current.target.x = primitiveBot.current.position.x
-            // OrbitControlsRef.current.target.y = primitiveBot.current.position.y
-            // OrbitControlsRef.current.target.z = primitiveBot.current.position.z
-
-            // cameraValues = [primitiveBot.current.position.x, 0, primitiveBot.current.position.z]
-            // console.log(primitive.current)
         })
         // *************************
 
@@ -544,27 +504,28 @@ export default function ThreeNew() {
     }
 
     function CharacterAndCamera(props) {
-        return (<group name="CameraAndBot" ref={cameraAndBotWrap} {...props} dispose={null}>
-            <OrbitControls
-                //[100, 60, 75]
-                //  position={[100, 60, 75]}
-                ref={OrbitControlsRef}
-                target={[0, 0, 0]}
-                // target0={new THREE.Vector3(0, 10, 0)}
-                maxPolarAngle={(Math.PI / 2) * 0.9}
-                autoRotate={false}
-                minDistance={50}
-                maxDistance={300}
-            // enablePan={false}
+        return (
+            <group name="CameraAndBot" position={[0, 0, 0]} rotation={[0, 0, 0]} ref={cameraAndBotWrap} {...props} dispose={null}>
+                <OrbitControls
+                    //[100, 60, 75]
+                    //  position={[100, 60, 75]}
+                    ref={OrbitControlsRef}
+                    target={[0, 0, 0]}
+                    // target0={new THREE.Vector3(0, 10, 0)}
+                    maxPolarAngle={(Math.PI / 2) * 0.9}
+                    autoRotate={false}
+                    minDistance={50}
+                    maxDistance={300}
+                // enablePan={false}
 
-            />
-            <group name="Camera" ref={cameraWrap} position={[10, 1, 5]} >
-                <PerspectiveCamera ref={defaultCamera} fov={42} makeDefault position={[-15, 10, -30]} rotation={[Math.PI / 4, (Math.PI) / 2 * 90, Math.PI / 4]} />
-            </group>
-            <group position={[0, 0, 0]} rotation={[0, 0, 0]}>
-                <Robot ref={robotRef} scale={20} position={[-20, 5, 0]} rotation={[0, 0, 0]}> </Robot>
-            </group>
-        </group>)
+                />
+                <group name="Camera" ref={cameraWrap} position={[10, 1, 5]} >
+                    <PerspectiveCamera ref={defaultCamera} fov={42} makeDefault position={[-15, 10, -30]} rotation={[Math.PI / 4, (Math.PI) / 2 * 90, Math.PI / 4]} />
+                </group>
+                <group name="CameraAndBot" position={[0, 0, 0]} rotation={[0, 0, 0]}>
+                    <Robot ref={robotRef} scale={20} position={[0, 0, 0]} rotation={[0, 0, 0]}> </Robot>
+                </group>
+            </group>)
     }
 
     function LoadEnvironment(props) {
@@ -572,52 +533,41 @@ export default function ThreeNew() {
         var loader = new THREE.TextureLoader();
         return (
             <>
-                <group ref={environmentWrap} position={[values.x, values.y, values.z]} scale="1">
-                <Box receiveShadow={true} position={[5, 10, -8]} size={[10, 10, 10]} rotation={[0, Math.PI / 2.9, 0]} color="white" image="/xMooney_Logo_Token_1000px_x_1000px.png" />
-                    <TimeofDay ></TimeofDay>
-                    {/* <Box receiveShadow={true} position={[values.cx, values.cy, values.cz]} size={[10, 10, 10]} /> */}
-                    <Sphere
-                        name={"Sphere_Ball"}
-                        displayName={"Sphere_Ball"}
-                        castShadow={true}
-                        position={[values.bx, values.by, values.bz]}
-                        scale={2}
-                        receiveShadow={false}
-                    ></Sphere>
-                    {/* <CharacterFBX scale={.03} position={[-20, 0, 0]} rotation={[0, 0, 0]}></CharacterFBX> */}
+                <group ref={environmentWrap} name="environmentWrap" position={[values.x, values.y, values.z]} rotation={[0, 0, 0]} scale="1">
 
+                    <group ref={landWrap} name="landWrap" position={[0, 0, 0]} rotate={[0, 0, 0]} scale="1">
+                        <Box receiveShadow={true} position={[0, 0, 0]} size={[10, 10, 10]} rotation={[0, Math.PI / 2.9, 0]} color="white" image="/xMooney_Logo_Token_1000px_x_1000px.png" />
+                        <TimeofDay ></TimeofDay>
 
+                        <Sphere
+                            name={"Sphere_Ball"}
+                            displayName={"Sphere_Ball"}
+                            castShadow={true}
+                            position={[values.bx, values.by, values.bz]}
+                            scale={2}
+                            receiveShadow={false}
+                        ></Sphere>
+                        <Plane name={"Plane_Ground"}
+                            displayName={"Plane_Ground"}
+                            receiveShadow={true}
+                            side={THREE.DoubleSide}
+                            // color= {"#ffffff"} //{colorObj}
+                            width={10}
+                            height={10}
+                            position={[0, 0, 0]}
+                            scale={20}
+                            map={useLoader(TextureLoader, '/textures/grass3.jpg')}
+                            bumpMap={useLoader(TextureLoader, '/textures/grass3.jpg')}
+                            roughnessMap={useLoader(TextureLoader, '/textures/grass3.jpg')}
+                            bumpScale={1}
+                            metalness={-.5}
+                            roughness={101}
+                            rotation={[Math.PI / 2, 0, 0]}></Plane>
+                        {/* <LightBulb position={[10, -1, -50]} /> */}
+                        {<Floor color="white" position={[0, -20.1, 0]} size={[10, 2, 10]} scale="20" />}
 
-                    {/* <group name="CameraAndBot" ref={cameraAndBotWrap} {...props} dispose={null}>
-                        <group name="Camera" ref={cameraWrap} position={[10, 1, 5]} rotation={[-100, (Math.PI*4/2), 10]}>
-                            <PerspectiveCamera ref={defaultCamera} fov={60}  makeDefault position={[-10, 0, -10]} />
-                        </group>
-                        <group position={[0, 0, 0]} rotation={[0, 0, 0]}>
-                            <Robot ref={robotRef} scale={20} position={[-20, 0, 0]} rotation={[0, 0, 0]}> </Robot>
-                        </group>
-                    </group> */}
-
-
-                    <Plane name={"Plane_Ground"}
-                        displayName={"Plane_Ground"}
-                        receiveShadow={true}
-                        side={THREE.DoubleSide}
-                        // color= {"#ffffff"} //{colorObj}
-                        width={10}
-                        height={10}
-                        position={[0, 0, 0]}
-                        scale={20}
-                        map={useLoader(TextureLoader, '/textures/grass3.jpg')}
-                        bumpMap={useLoader(TextureLoader, '/textures/grass3.jpg')}
-                        roughnessMap={useLoader(TextureLoader, '/textures/grass3.jpg')}
-                        bumpScale={1}
-                        metalness={-.5}
-                        roughness={101}
-                        rotation={[Math.PI / 2, 0, 0]}></Plane>
-                    {/* <LightBulb position={[10, -1, -50]} /> */}
-                    {<Floor color="white" position={[0, -20.1, 0]} size={[10, 2, 10]} scale="20" />}
-
-                    <Warehouse receiveShadow={false} scale={[3, 3, 3]} position={[0, (2.95 * 3) - .1, 80]}></Warehouse>
+                        <Warehouse receiveShadow={false} scale={[3, 3, 3]} position={[0, (2.95 * 3) - .1, 80]}></Warehouse>
+                    </group>
                 </group>
             </>
         );
@@ -673,12 +623,13 @@ export default function ThreeNew() {
                 {/* <Camera></Camera> */}
                 {/* <PerspectiveCamera ref={PerspectiveCameraRef} fov={75} position={[100, 50, 20]} /> */}
                 <Suspense fallback={<Loader />}>
+
                     {/* <Camera ref={Camera} position={[0, 0, 0]} /> */}
                     {/* <PerspectiveCamera ref={PerspectiveCameraRef} manual position={[10,20,10]}>
                     </PerspectiveCamera> */}
                     <CharacterAndCamera />
                     <LoadEnvironment />
-                    
+
                     {/* <GetSpotLight
                         intensity={values.intensity}
                         castShadow={true}
@@ -700,6 +651,7 @@ export default function ThreeNew() {
                         color={'rgb(255, 220, 180)'}
                     ></GetSpotLight> */}
                     <Ren></Ren>
+                    <axisHelper scale={50} position={[0, 0, 0]} />
                     {/* <Keyboard setUpKeyPressed={setUpKeyPressed} />  */}
 
                 </Suspense>
