@@ -389,7 +389,7 @@ export default function ThreeNew(props) {
                             environmentLB1={[values.x, values.y, values.z]}
                             environmentLB2={[values.lb2X, values.lb2Y, values.lb2Z]}
                         ></TimeOfDay>
-                        <Physics gravity={[0, -0, 0]}>
+                        <Physics gravity={[0, -9.81, 0]}>
                             <GetBall></GetBall>
                         </Physics>
                         <ObjectStich.Plane name={"Plane_Ground"}
