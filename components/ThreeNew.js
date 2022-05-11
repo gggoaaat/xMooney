@@ -364,14 +364,14 @@ export default function ThreeNew() {
         let lastanimation = 2
         function _CalculateIdealOffset(object) {
             const idealOffset = new THREE.Vector3(-15, 20, -30);
-            idealOffset.applyQuaternion(new THREE.Quaternion(object.position.x, object.position.y, object.position.z, 1));
+            idealOffset.applyQuaternion(new THREE.Quaternion(object.rotation.x, object.rotation.y, object.rotation.z, 1));
             idealOffset.add(object.position);
             return idealOffset;
         }
 
         function _CalculateIdealLookat(object) {
             const idealLookat = new THREE.Vector3(0, 10, 50);
-            idealLookat.applyQuaternion(new THREE.Quaternion(object.position.x, object.position.y, object.position.z, 1));
+            idealLookat.applyQuaternion(new THREE.Quaternion(object.rotation.x, object.rotation.y, object.rotation.z, 1));
             idealLookat.add(object.position);
             return idealLookat;
         }
@@ -388,8 +388,8 @@ export default function ThreeNew() {
             const speed = .5
             const pivotSpeed = .05
             mixer.clipAction(model.animations[lastanimation]).fadeOut()
-            const idealOffset = _CalculateIdealOffset(primitiveBot.current);
-            const idealLookat = _CalculateIdealLookat(primitiveBot.current);
+            const idealOffset = _CalculateIdealOffset(cameraAndBotWrap.current);
+            const idealLookat = _CalculateIdealLookat(cameraAndBotWrap.current);
             // const t = 0.05;
             // const t = 4.0 * timeElapsed;
             const t = 1.0 - Math.pow(0.001, state.clock.elapsedTime);
@@ -397,7 +397,11 @@ export default function ThreeNew() {
             // this._camera.lookAt(this._currentLookat);
             // console.log(canvasRef.current.camera)
             _currentPosition.lerp(idealOffset, t);
+            
             _currentLookat.lerp(idealLookat, t)
+            console.log("lerp")
+            console.log(_currentPosition)
+            console.log(_currentLookat)
             // state.camera.position = _currentPosition
             // state.camera.lookAt(this._currentLookat);
 
@@ -426,7 +430,7 @@ export default function ThreeNew() {
                     // cameraAndBotWrap.current.rotateY(-pivotSpeed)
                     cameraAndBotWrap.current.position.x += speed;
                     cameraAndBotWrap.current.position.z += speed
-                    cameraAndBotWrap.current.rotation.y = Math.PI / 180 * 45
+                    robotRef.current.rotation.y = Math.PI / 180 * 45
                     dualpress = true;
                 }
 
@@ -434,13 +438,13 @@ export default function ThreeNew() {
                     // cameraAndBotWrap.current.rotateY(pivotSpeed)
                     cameraAndBotWrap.current.position.x -= speed;
                     cameraAndBotWrap.current.position.z += speed
-                    cameraAndBotWrap.current.rotation.y = (Math.PI * 3) / 180 * 225
+                    robotRef.current.rotation.y = (Math.PI * 3) / 180 * 225
                     dualpress = true;
                 }
 
                 if (dualpress == false)
                     cameraAndBotWrap.current.position.z += speed
-                    cameraAndBotWrap.current.rotation.y = 0
+                    robotRef.current.rotation.y = 0
             }
             else if (keys.pressed('ArrowDown')) {
                 mixer.clipAction(model.animations[3]).play().fadeIn()
@@ -448,32 +452,32 @@ export default function ThreeNew() {
                 if (keys.pressed('ArrowLeft')) {
                     cameraAndBotWrap.current.position.x += speed;
                     cameraAndBotWrap.current.position.z -= speed
-                    cameraAndBotWrap.current.rotation.y = (3 * Math.PI) / 180 * 45
+                    robotRef.current.rotation.y = (3 * Math.PI) / 180 * 45
                     dualpress = true;
                 }
                 if (keys.pressed('ArrowRight')) {
                     // cameraAndBotWrap.current.rotateY(pivotSpeed)
                     cameraAndBotWrap.current.position.x = speed;
                     cameraAndBotWrap.current.position.z += speed
-                    cameraAndBotWrap.current.rotation.y = (Math.PI / 180 * 225)
+                    robotRef.current.rotation.y = (Math.PI / 180 * 225)
                     dualpress = true
                 }
 
                 if (dualpress == false)
                     cameraAndBotWrap.current.position.z -= speed
-                    cameraAndBotWrap.current.rotation.y = Math.PI / 1
+                    robotRef.current.rotation.y = Math.PI / 1
             }
             else if (keys.pressed('ArrowLeft')) {
-
+                cameraWrap
                 cameraAndBotWrap.current.position.x += speed;
-                cameraAndBotWrap.current.rotation.y = Math.PI / 2
+                robotRef.current.rotation.y = Math.PI / 2
                 mixer.clipAction(model.animations[3]).play().fadeIn()
                 lastanimation = 3
             }
             else if (keys.pressed('ArrowRight')) {
 
                 cameraAndBotWrap.current.position.x -= speed;
-                cameraAndBotWrap.current.rotation.y = (3 * Math.PI) / 2
+                robotRef.current.rotation.y = (3 * Math.PI) / 2
                 mixer.clipAction(model.animations[3]).play().fadeIn()
                 lastanimation = 3
             }
@@ -499,8 +503,6 @@ export default function ThreeNew() {
                 {...props}
             />
         )
-
-
     }
 
     function CharacterAndCamera(props) {
@@ -519,11 +521,11 @@ export default function ThreeNew() {
                 // enablePan={false}
 
                 />
-                <group name="Camera" ref={cameraWrap} position={[10, 1, 5]} >
+                <group name="Camera" ref={cameraWrap} position={[-5, 20, -20]} rotation={[0, 0, 0]}>
                     <PerspectiveCamera ref={defaultCamera} fov={42} makeDefault position={[-15, 10, -30]} rotation={[Math.PI / 4, (Math.PI) / 2 * 90, Math.PI / 4]} />
                 </group>
-                <group name="CameraAndBot" position={[0, 0, 0]} rotation={[0, 0, 0]}>
-                    <Robot ref={robotRef} scale={20} position={[0, 0, 0]} rotation={[0, 0, 0]}> </Robot>
+                <group name="robotRef"  ref={robotRef} position={[0, 0, 0]} rotation={[0, 0, 0]}>
+                    <Robot scale={20} position={[0, 0, 0]} rotation={[0, 0, 0]}> </Robot>
                 </group>
             </group>)
     }
