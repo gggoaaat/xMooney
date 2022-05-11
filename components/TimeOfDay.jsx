@@ -6,7 +6,7 @@ import LightBulb from './Lightbulb';
 export default function TimeOfDay(props) {
 
     const start = 8 * 60 + 5;
-    const end = 9 * 60 + 17;
+    const end = 19 * 60 + 17;
     const date = new Date();
     const now = date.getHours() * 60 + date.getMinutes();
     console.log(start)

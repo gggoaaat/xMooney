@@ -297,7 +297,7 @@ export default function ThreeNew(props) {
                     <Character camera={camera} scale={10} position={new THREE.Vector3(-20, -0.05, 0)} rotation={[0, 0, 0]} quaternion={new THREE.Quaternion()} />
                     <LoadEnvironment />
 
-                    <GetSpotLight
+                    {/* <GetSpotLight
                         intensity={values.intensity}
                         castShadow={true}
                         penumbra={0.5}
@@ -306,7 +306,7 @@ export default function ThreeNew(props) {
                         shadow-bias={0.001}
                         position={[10, 50, 0]}
                         color={'rgb(255, 255, 255)'}
-                    ></GetSpotLight>
+                    ></GetSpotLight> */}
                     {/* <GetSpotLight
                         intensity={values.intensity}
                         position={[values.lx, values.ly, values.lz]}
