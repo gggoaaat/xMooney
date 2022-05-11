@@ -135,7 +135,7 @@ export default function ThreeNew(props) {
             },
             { render: (get) => get('showLightbulb') }
         )
-    })  
+    })
 
     function GetBall(props) {
         const ballRef = useRef();
@@ -144,19 +144,19 @@ export default function ThreeNew(props) {
         const [hover, setHover] = useState(false);
         const ObjectStich = objectStich()
 
-        if (ballRef)
-            useFrame(({ clock }) => {
-                if (hover) {
-                    if (ballRef.current && ballRef.current.position)
-                        ballRef.current.position.y += 0.1;
-                }
-                else {
-                    if (ballRef.current && ballRef.current.position)
-                        if (ballRef.current.position.y >= 0) {
-                            ballRef.current.position.y += -0.1;
-                        }
-                }
-            });
+
+        useFrame(({ clock }) => {
+            if (hover) {
+                if (ballRef.current && ballRef.current.position)
+                    ballRef.current.position.y += 0.1;
+            }
+            else {
+                if (ballRef.current && ballRef.current.position)
+                    if (ballRef.current.position.y >= 0) {
+                        ballRef.current.position.y += -0.1;
+                    }
+            }
+        });
 
         return (
 

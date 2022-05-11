@@ -95,19 +95,19 @@ export default function Game() {
         const [hover, setHover] = useState(false);
         const ObjectStich = objectStich()
 
-        if (boxRef)
-            useFrame(({ clock }) => {
-                if (hover) {
-                    if (boxRef.current && boxRef.current.position)
-                        boxRef.current.position.y += 0.1;
-                }
-                else {
-                    if (boxRef.current && boxRef.current.position)
-                        if (boxRef.current.position.y >= 0) {
-                            boxRef.current.position.y += -0.1;
-                        }
-                }
-            });
+
+        useFrame(({ clock }) => {
+            if (hover) {
+                if (boxRef.current && boxRef.current.position)
+                    boxRef.current.position.y += 0.1;
+            }
+            else {
+                if (boxRef.current && boxRef.current.position)
+                    if (boxRef.current.position.y >= 0) {
+                        boxRef.current.position.y += -0.1;
+                    }
+            }
+        });
 
         return (
 
@@ -124,7 +124,7 @@ export default function Game() {
                 }}
             >
                 <sphereBufferGeometry args={[0.7, 30, 30]} attach="geometry" />
-                <meshLambertMaterial wireframe  color={"rgb(10, 50, 80)"}></meshLambertMaterial>
+                <meshLambertMaterial wireframe color={"rgb(10, 50, 80)"}></meshLambertMaterial>
             </mesh>
         )
     }
@@ -133,33 +133,33 @@ export default function Game() {
 
     return (
         <>
-          <div className="scene" id="theScene">
-            <Canvas shadows gl={{ alpha: false }} camera={{ fov: 45 }}>
-                <TimeOfDay
-                    environmentLB1={[values.x, values.y, values.z]}
-                    environmentLB2={[values.lb2X, values.lb2Y, values.lb2Z]}
-                ></TimeOfDay>
-                <ambientLight intensity={0.3} />
-                <pointLight castShadow intensity={0.8} position={[100, 100, 100]} />
-                <Physics gravity={[0, -9.81, 0]}>
-                    <Ground />
-                    <Player />
-                    <Cube position={[0, 0.5, -10]} />
-                    <Cubes />
-                    <Warehouse receiveShadow={false} scale={[3, 3, 3]} position={[0, 0, 80]}></Warehouse>
-                    <GetBall></GetBall>
-                </Physics>
-                <PointerLockControls position={[0,20,0]} />
-            </Canvas>
-        </div>
-        <div className="dot" />
-        <div className={`fullscreen bg ${ready ? "ready" : "notready"} ${ready && "clicked"}`}>
-        <div className="stack">
-          <button onClick={() => set(true)}>Click (needs fullscreen)</button>
-        </div>
-        
-      </div>
-      
+            <div className="scene" id="theScene">
+                <Canvas shadows gl={{ alpha: false }} camera={{ fov: 45 }}>
+                    <TimeOfDay
+                        environmentLB1={[values.x, values.y, values.z]}
+                        environmentLB2={[values.lb2X, values.lb2Y, values.lb2Z]}
+                    ></TimeOfDay>
+                    <ambientLight intensity={0.3} />
+                    <pointLight castShadow intensity={0.8} position={[100, 100, 100]} />
+                    <Physics gravity={[0, -9.81, 0]}>
+                        <Ground />
+                        <Player />
+                        <Cube position={[0, 0.5, -10]} />
+                        <Cubes />
+                        <Warehouse receiveShadow={false} scale={[3, 3, 3]} position={[0, 0, 80]}></Warehouse>
+                        <GetBall></GetBall>
+                    </Physics>
+                    <PointerLockControls position={[0, 20, 0]} />
+                </Canvas>
+            </div>
+            <div className="dot" />
+            <div className={`fullscreen bg ${ready ? "ready" : "notready"} ${ready && "clicked"}`}>
+                <div className="stack">
+                    <button onClick={() => set(true)}>Click (needs fullscreen)</button>
+                </div>
+
+            </div>
+
         </>
     )
 }
