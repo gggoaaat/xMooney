@@ -17,6 +17,7 @@ import XMooneyTransactions from "../components/XMooneyTransactions";
 // import Land from "../components/Three"
 import Land from "../components/ThreeNew"
 import XMVR from "../components/XMVR"
+import Game from "../components/Game";
 
 
 
@@ -119,9 +120,10 @@ export default function Home() {
             </TabList>
             <TabPanels>
               <TabPanel>
-                <Land user={user} ></Land>
+              <Game user={user} ></Game>
+                {/* <Land user={user} ></Land> */}
                 {/* <XMVR user={user} bgColor='#141622'></XMVR> */}
-              </TabPanel>
+              </TabPanel>             
               <TabPanel><Profile user={user}></Profile></TabPanel>
               <TabPanel><Balance user={user}></Balance></TabPanel>
               <TabPanel><Transactions user={user}></Transactions></TabPanel>

@@ -1,5 +1,6 @@
 import React, { forwardRef, useRef, useState, useMemo, Suspense, useEffect, useLayoutEffect } from 'react'
 import { Leva, folder, useControls } from 'leva'
+import { Physics } from "@react-three/cannon";
 import styled from 'styled-components';
 import * as THREE from "three";
 import {
@@ -388,39 +389,11 @@ export default function ThreeNew() {
             const speed = .5
             const pivotSpeed = .05
             mixer.clipAction(model.animations[lastanimation]).fadeOut()
-            const idealOffset = _CalculateIdealOffset(cameraAndBotWrap.current);
-            const idealLookat = _CalculateIdealLookat(cameraAndBotWrap.current);
-            // const t = 0.05;
-            // const t = 4.0 * timeElapsed;
-            const t = 1.0 - Math.pow(0.001, state.clock.elapsedTime);
-            // this._camera.position.copy(this._currentPosition);
-            // this._camera.lookAt(this._currentLookat);
-            // console.log(canvasRef.current.camera)
-            _currentPosition.lerp(idealOffset, t);
-            
-            _currentLookat.lerp(idealLookat, t)
-            console.log("lerp")
-            console.log(_currentPosition)
-            console.log(_currentLookat)
-            // state.camera.position = _currentPosition
-            // state.camera.lookAt(this._currentLookat);
-
-            //            console.log(_currentPosition)
-            // OrbitControlsRef.position = _currentPosition
-            let x1 = cameraAndBotWrap.current.position.x - 10
-            let z1 = cameraAndBotWrap.current.position.z + 52
-
-            console.log(environmentWrap.current)
-
-
 
             // defaultCamera.current.lookAt(new THREE.Vector3(x1, 1, z1))
             defaultCamera.current.lookAt(cameraAndBotWrap.current.position)
 
-            // console.log(environmentWrap.current.position)
-            // console.log(cameraAndBotWrap.current.position)
-           
-            let thisParams = { enabled: true, speed: 11, interval: 0, x: 150, y: -100, radius: 20 };
+            // let thisParams = { enabled: true, speed: 11, interval: 0, x: 150, y: -100, radius: 20 };
             let dualpress = false;
             if (keys.pressed('ArrowUp')) {
                 mixer.clipAction(model.animations[3]).play().fadeIn()
@@ -432,6 +405,7 @@ export default function ThreeNew() {
                     cameraAndBotWrap.current.position.z += speed
                     robotRef.current.rotation.y = Math.PI / 180 * 45
                     dualpress = true;
+                    console.log("Up Left")
                 }
 
                 if (keys.pressed('ArrowRight')) {
@@ -440,11 +414,12 @@ export default function ThreeNew() {
                     cameraAndBotWrap.current.position.z += speed
                     robotRef.current.rotation.y = (Math.PI * 3) / 180 * 225
                     dualpress = true;
+                    console.log("Up Right")
                 }
 
                 if (dualpress == false)
                     cameraAndBotWrap.current.position.z += speed
-                    robotRef.current.rotation.y = 0
+                robotRef.current.rotation.y = 0
             }
             else if (keys.pressed('ArrowDown')) {
                 mixer.clipAction(model.animations[3]).play().fadeIn()
@@ -454,18 +429,20 @@ export default function ThreeNew() {
                     cameraAndBotWrap.current.position.z -= speed
                     robotRef.current.rotation.y = (3 * Math.PI) / 180 * 45
                     dualpress = true;
+                    console.log("Down Left")
                 }
                 if (keys.pressed('ArrowRight')) {
                     // cameraAndBotWrap.current.rotateY(pivotSpeed)
-                    cameraAndBotWrap.current.position.x = speed;
-                    cameraAndBotWrap.current.position.z += speed
-                    robotRef.current.rotation.y = (Math.PI / 180 * 225)
+                    cameraAndBotWrap.current.position.x -= speed;
+                    cameraAndBotWrap.current.position.z -= speed
+                    robotRef.current.rotation.y = (7 * Math.PI) / 4 //(Math.PI / 180 * 225)
                     dualpress = true
+                    console.log("Down Right")
                 }
 
                 if (dualpress == false)
                     cameraAndBotWrap.current.position.z -= speed
-                    robotRef.current.rotation.y = Math.PI / 1
+                robotRef.current.rotation.y = Math.PI / 1
             }
             else if (keys.pressed('ArrowLeft')) {
                 cameraWrap
@@ -507,7 +484,7 @@ export default function ThreeNew() {
 
     function CharacterAndCamera(props) {
         return (
-            <group name="CameraAndBot" position={[0, 0, 0]} rotation={[0, 0, 0]} ref={cameraAndBotWrap} {...props} dispose={null}>
+            <group name="CameraAndBot" position={[-20, 0, 0]} rotation={[0, 0, 0]} ref={cameraAndBotWrap} {...props} dispose={null}>
                 <OrbitControls
                     //[100, 60, 75]
                     //  position={[100, 60, 75]}
@@ -524,7 +501,7 @@ export default function ThreeNew() {
                 <group name="Camera" ref={cameraWrap} position={[-5, 20, -20]} rotation={[0, 0, 0]}>
                     <PerspectiveCamera ref={defaultCamera} fov={42} makeDefault position={[-15, 10, -30]} rotation={[Math.PI / 4, (Math.PI) / 2 * 90, Math.PI / 4]} />
                 </group>
-                <group name="robotRef"  ref={robotRef} position={[0, 0, 0]} rotation={[0, 0, 0]}>
+                <group name="robotRef" ref={robotRef} position={[0, 0, 0]} rotation={[0, 0, 0]}>
                     <Robot scale={20} position={[0, 0, 0]} rotation={[0, 0, 0]}> </Robot>
                 </group>
             </group>)
@@ -532,23 +509,54 @@ export default function ThreeNew() {
 
     function LoadEnvironment(props) {
 
+        const boxRef = useRef();
         var loader = new THREE.TextureLoader();
+
+        const [active, setActive] = useState(false);
+        const [hover, setHover] = useState(false);
+
+        useFrame(({ clock }) => {
+            if (hover) {
+                boxRef.current.position.y += 0.1;
+            }
+            else {
+                if (boxRef.current.position.y >= 0) {
+                    boxRef.current.position.y += -0.1;
+                }
+            }
+        });
+
+
         return (
             <>
                 <group ref={environmentWrap} name="environmentWrap" position={[values.x, values.y, values.z]} rotation={[0, 0, 0]} scale="1">
 
                     <group ref={landWrap} name="landWrap" position={[0, 0, 0]} rotate={[0, 0, 0]} scale="1">
-                        <Box receiveShadow={true} position={[0, 0, 0]} size={[10, 10, 10]} rotation={[0, Math.PI / 2.9, 0]} color="white" image="/xMooney_Logo_Token_1000px_x_1000px.png" />
+                        <Box
+                            receiveShadow={true}
+                            position={[0, 0, 0]}
+                            size={[10, 10, 10]}
+                            rotation={[0, Math.PI / 2.9, 0]}
+                            color="white"
+                            image="/xMooney_Logo_Token_1000px_x_1000px.png" />
                         <TimeofDay ></TimeofDay>
-
-                        <Sphere
-                            name={"Sphere_Ball"}
-                            displayName={"Sphere_Ball"}
-                            castShadow={true}
-                            position={[values.bx, values.by, values.bz]}
-                            scale={2}
-                            receiveShadow={false}
-                        ></Sphere>
+                        <Physics gravity={[0, -0, 0]}>
+                            <group ref={boxRef} position={[values.bx, values.by, values.bz]} rotate={[0, 0, 0]} scale="1">
+                                <Sphere
+                                    name={"Sphere_Ball"}
+                                    displayName={"Sphere_Ball"}
+                                    castShadow={true}
+                                    scale={2}
+                                    receiveShadow={false}
+                                    onPointerOver={() => {
+                                        setHover(true);
+                                    }}
+                                    onPointerOut={() => {
+                                        setHover(false);
+                                    }}
+                                ></Sphere>
+                            </group>
+                        </Physics>
                         <Plane name={"Plane_Ground"}
                             displayName={"Plane_Ground"}
                             receiveShadow={true}
@@ -632,7 +640,7 @@ export default function ThreeNew() {
                     <CharacterAndCamera />
                     <LoadEnvironment />
 
-                    {/* <GetSpotLight
+                    <GetSpotLight
                         intensity={values.intensity}
                         castShadow={true}
                         penumbra={0.5}
@@ -641,7 +649,7 @@ export default function ThreeNew() {
                         shadow-bias={0.001}
                         position={[10, 50, 0]}
                         color={'rgb(255, 255, 255)'}
-                    ></GetSpotLight> */}
+                    ></GetSpotLight>
                     {/* <GetSpotLight
                         intensity={values.intensity}
                         position={[values.lx, values.ly, values.lz]}
