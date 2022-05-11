@@ -110,7 +110,8 @@ export default function Home() {
                 boxShadow: 'inset 0 -2px 0 rgba(0, 0, 0, 0.1)',
                 border: '0 none'
               }}>
-              <Tab fontWeight="bold">My Land</Tab>
+              {/* <Tab fontWeight="bold">My Land</Tab> */}
+              <Tab fontWeight="bold">My Game</Tab>
               <Tab fontWeight="bold">Profile</Tab>
               <Tab fontWeight="bold">Balance</Tab>
               <Tab fontWeight="bold">BSC Txs</Tab>
@@ -119,9 +120,13 @@ export default function Home() {
               <Tab fontWeight="bold">Send ETH</Tab>
             </TabList>
             <TabPanels>
-              <TabPanel>
+              {/* <TabPanel>
               <Game user={user} ></Game>
-                {/* <Land user={user} ></Land> */}
+              
+              </TabPanel>            */}
+              <TabPanel>  
+              {/* <Game user={user} ></Game> */}
+                <Land user={user} ></Land>
                 {/* <XMVR user={user} bgColor='#141622'></XMVR> */}
               </TabPanel>             
               <TabPanel><Profile user={user}></Profile></TabPanel>
