@@ -86,3 +86,22 @@ export default function ObjectStich(props) {
         Sphere
     }
 }
+
+
+
+ {/* <ObjectStich.Plane name={"Plane_Ground"}
+                            displayName={"Plane_Ground"}
+                            receiveShadow={true}
+                            side={THREE.DoubleSide}
+                            // color= {"#ffffff"} //{colorObj}
+                            width={10}
+                            height={10}
+                            position={[0, 0, 0]}
+                            scale={20}
+                            map={useLoader(TextureLoader, '/textures/grass3.jpg')}
+                            bumpMap={useLoader(TextureLoader, '/textures/grass3.jpg')}
+                            roughnessMap={useLoader(TextureLoader, '/textures/grass3.jpg')}
+                            bumpScale={1}
+                            metalness={-.5}
+                            roughness={101}
+                            rotation={[Math.PI / 2, 0, 0]}></ObjectStich.Plane> */}

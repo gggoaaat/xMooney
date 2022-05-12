@@ -18,7 +18,7 @@ import XMooneyTransactions from "../components/XMooneyTransactions";
 import Land from "../components/ThreeNew"
 import XMVR from "../components/XMVR"
 import Game from "../components/Game";
-import WithSubnavigation from "../components/NewHeader"; 
+
 
 
 export default function Home() {
@@ -92,9 +92,52 @@ export default function Home() {
       <Head>
         <title>{process.env.title}</title>
       </Head>
-      <Flex direction="column">        
-        <WithSubnavigation user={user} logout={logout} isLoggingOut={isLoggingOut}></WithSubnavigation>
-        <Land user={user} ></Land>
+      <Flex direction="column">
+        <Header user={user} logout={logout} > isLoggingOut={isLoggingOut}</Header>
+        <Box flex="1" p={[0, 0, 0, 0]} bg="blackAlpha.100" px={[1, 1]} py={[1, 1]}>
+          <Tabs
+            variant='enclosed'
+            pl={[50]}
+            // size={["sm", "lg"]}
+            mt={[2, 4, 6, 8]}
+            // variant='soft-rounded' 
+            colorScheme='green' align="center">
+            <TabList overflowX="auto"
+              css={{
+                scrollbarWidth: 'none',
+                '::-webkit-scrollbar': { display: 'none' },
+                '-webkit-overflow-scrolling': 'touch',
+                boxShadow: 'inset 0 -2px 0 rgba(0, 0, 0, 0.1)',
+                border: '0 none'
+              }}>
+              {/* <Tab fontWeight="bold">My Land</Tab> */}
+              <Tab fontWeight="bold">My Game</Tab>
+              <Tab fontWeight="bold">Profile</Tab>
+              <Tab fontWeight="bold">Balance</Tab>
+              <Tab fontWeight="bold">BSC Txs</Tab>
+              <Tab fontWeight="bold">xMooney Txs</Tab>
+              <Tab fontWeight="bold">NFTs</Tab>
+              <Tab fontWeight="bold">Send ETH</Tab>
+            </TabList>
+            <TabPanels>
+              {/* <TabPanel>
+              <Game user={user} ></Game>
+              
+              </TabPanel>            */}
+              <TabPanel>  
+              {/* <Game user={user} ></Game> */}
+                <Land user={user} ></Land>
+                {/* <XMVR user={user} bgColor='#141622'></XMVR> */}
+              </TabPanel>             
+              <TabPanel><Profile user={user}></Profile></TabPanel>
+              <TabPanel><Balance user={user}></Balance></TabPanel>
+              <TabPanel><Transactions user={user}></Transactions></TabPanel>
+              <TabPanel><XMooneyTransactions user={user}></XMooneyTransactions></TabPanel>
+              <TabPanel><NFT user={user}></NFT></TabPanel>
+              <TabPanel><Send user={user}></Send></TabPanel>
+            </TabPanels>
+          </Tabs>
+        </Box>
       </Flex>
     </>
   )

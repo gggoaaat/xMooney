@@ -1,51 +1,148 @@
 import React, { forwardRef, useRef, useState, useMemo, Suspense, useEffect, useLayoutEffect } from 'react'
-import { Leva, folder, useControls } from 'leva'
-import { Physics } from "@react-three/cannon";
-import styled from 'styled-components';
+import { Canvas, useFrame, useLoader } from "@react-three/fiber";
+import { Html, useProgress, OrbitControls } from '@react-three/drei'
+import { Physics, usePlane, useSphere, useBox } from "@react-three/cannon";
 import * as THREE from "three";
-import {
-    Canvas,
-    useFrame,
-    useLoader,
-    useThree,
-    Camera
-} from "@react-three/fiber";
-import { TextureLoader } from 'three/src/loaders/TextureLoader'
-// import { Group } from "three";
-// import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
-import Box from "./assets/Box";
-//import OrbitControls from "../components/OrbitControls";
-// import LightBulb from "./assets/Light";
-import LightBulb from './Lightbulb';
-import Floor from "./assets/Floor";
-//import { useGLTF, useAnimations, Html, useProgress, useFBX, Cloud, Stars, Sky, Image, Cylinder, OrbitControls, Environment, useGLTF, Float, TransformControls, QuadraticBezierLine, Backdrop, ContactShadows } from '@react-three/drei'
-import { PerspectiveCamera, Stars, useGLTF, useAnimations, Html, useProgress, useFBX, Sky, OrbitControls } from '@react-three/drei'
-import {
-    GLTFLoader
-} from 'three/examples/jsm/loaders/GLTFLoader';
-// import five from "./assets/five.png";
-// import Draggable from "./Draggable";
-// import { cookieStorageManager, position } from '@chakra-ui/react';
-// import { WebGL1Renderer } from 'three';
-import Warehouse from "../components/assets/Warehouse";
-import Robot from "../components/assets/Robot";
-import Keyboard from "../components/keyboard";
-// import { Camera } from 'three';
-// import AsicMiner from "./assets/AsicMiner";
-// import GpuMiner from "./assets/GpuMiner";
-// import Shelf from "./assets/Shelf";
-// import Spaceman from "./assets/Spaceman";
-// import Ship from "./assets/Ship";
+import { Leva, folder, useControls } from 'leva'
 import { useKeyState } from 'use-key-state'
-import { useSwipeable } from 'react-swipeable';
-import { useRaribleLazyMint } from 'react-moralis';
-import { Vector3 } from 'three';
-// import { Camera } from 'three';
-import GetMaterial from './GetMaterial';
+
+import { TextureLoader } from 'three/src/loaders/TextureLoader'
+import Box from "./assets/Box";
+import Floor from "./assets/Floor";
+import Warehouse from "../components/assets/Warehouse";
 import objectStich from './ObjectStich';
 import TimeOfDay from './TimeOfDay';
 import Character from './Character';
+// import { useRenderRoot } from 'leva/dist/declarations/src/components/Leva';
 
+const positions = [
+    [0, 2, 3],
+    [-1, 5, 16],
+    [-2, 5, -10],
+    [0, 12, 3],
+    [-10, 5, 16],
+    [8, 5, -10]
+];
+
+function Box2({ position }) {
+    const [ref] = useBox(() => ({
+        mass: 10,
+        position: position,
+        args: [2, 2, 2]
+    }));
+
+    return (
+        <mesh ref={ref} castShadow>
+            <boxBufferGeometry attach="geometry" args={[2, 2, 2]} />
+            <meshStandardMaterial color="white" />
+        </mesh>
+    );
+}
+const Ball = ({ position, color }) => {
+    const [ballRef] = useSphere(() => ({ mass: 1, position: position }));
+  
+  
+    return (
+      <mesh ref={ballRef} position={position} receiveShadow castShadow>
+        <sphereBufferGeometry args={[1, 36, 36]} />
+        <meshPhysicalMaterial
+          color={color}
+         
+        />
+      </mesh>
+    );
+  };
+
+  
+function GetBall(props) {
+    // const ballRef = useRef();
+    const [ballRef] = useSphere(() => ({
+        mass: 1,
+        // position: props.position,
+        // rotation: [0, 0, 0],
+        // receiveShadow: true,
+        // type: "Static"
+    }))
+
+    const [active, setActive] = useState(false);
+    const [hover, setHover] = useState(false);
+    const ObjectStich = objectStich()
+
+
+    useFrame(({ clock }) => {
+        if (hover) {
+            if (ballRef.current && ballRef.current.position)
+                ballRef.current.position.y += 1;
+        }
+        // else {
+        //     if (ballRef.current && ballRef.current.position)
+        //         if (ballRef.current.position.y >= 0) {
+        //             ballRef.current.position.y += -0.1;
+        //         }
+        // }
+    });
+
+    return (
+        <mesh ref={ballRef}
+            
+            position={props.position}
+            receiveShadow={true}
+            castShadow={true}
+            {...props}
+            onPointerOver={() => {
+                setHover(true);
+            }}
+            onPointerOut={() => {
+                setHover(false);
+            }}
+        >
+            <sphereBufferGeometry
+                // attach="geometry"
+                args={[1, 36, 36]}
+            />
+            <meshLambertMaterial
+                color={"rgb(10, 50, 80)"}
+            ></meshLambertMaterial>
+        </mesh>
+    )
+}
+
+const GetPlane = () => {
+
+    const [ref, api] = usePlane(() => ({
+        mass: 1,
+        position: [0, 0, 0],
+        rotation: [-Math.PI / 2, 0, 0],
+        type: "Static"
+    }))
+    // useFrame(({ mouse }) => {
+    //       api.rotation.set(-Math.PI / 2, 0, 0);
+    //   });
+
+    return (
+        <mesh
+            receiveShadow={true}
+            scale={1}
+            ref={ref}
+        >
+            <planeBufferGeometry
+                attach="geometry"
+                args={[200, 200, 5, 200]}
+            />
+            <meshStandardMaterial
+                attach="material"
+                side={THREE.DoubleSide}
+                map={useLoader(TextureLoader, '/textures/grass3.jpg')}
+                bumpMap={useLoader(TextureLoader, '/textures/grass3.jpg')}
+                roughnessMap={useLoader(TextureLoader, '/textures/grass3.jpg')}
+                bumpScale={1}
+                metalness={-.5}
+                roughness={101}
+            />
+
+        </mesh>
+    )
+}
 
 export default function ThreeNew(props) {
 
@@ -53,22 +150,12 @@ export default function ThreeNew(props) {
     const canvasRef = useRef()
     const environmentWrap = useRef()
     const landWrap = useRef()
+    const OrbitControlsRef = useRef()
 
     function Loader() {
         const { progress } = useProgress()
         return (<Html center>{progress} % loaded</Html>)
     }
-
-    const keys = useKeyState().keyStateQuery
-
-    let cameraValues = [0, 0, 0]
-
-    const OrbitControlsRef = useRef()
-    const primitiveBot = useRef()
-    const test = function (props) {
-        // console.log(Canvas);
-        Canvas.displayName = "Test"
-    }();
 
     const values = useControls({
         intensity: { value: 5, min: 0, max: 20, step: 1 },
@@ -122,8 +209,8 @@ export default function ThreeNew(props) {
         lightBulb1: folder(
             {
                 lb1X: { value: -.09, min: -100, max: 200, step: .01 },
-                lb1Y: { value: 65, min: -100, max: 200, step: .01 },
-                lb1Z: { value: 150, min: -100, max: 200, step: .01 }
+                lb1Y: { value: 50, min: -100, max: 200, step: .01 },
+                lb1Z: { value: 110, min: -100, max: 200, step: .01 }
             },
             { render: (get) => get('showLightbulb') }
         ),
@@ -137,46 +224,7 @@ export default function ThreeNew(props) {
         )
     })
 
-    function GetBall(props) {
-        const ballRef = useRef();
 
-        const [active, setActive] = useState(false);
-        const [hover, setHover] = useState(false);
-        const ObjectStich = objectStich()
-
-
-        useFrame(({ clock }) => {
-            if (hover) {
-                if (ballRef.current && ballRef.current.position)
-                    ballRef.current.position.y += 0.1;
-            }
-            else {
-                if (ballRef.current && ballRef.current.position)
-                    if (ballRef.current.position.y >= 0) {
-                        ballRef.current.position.y += -0.1;
-                    }
-            }
-        });
-
-        return (
-
-            <mesh ref={ballRef}
-                position={[values.bx, 20, values.bz]}
-                rotation={[0, 0, 0]}
-                scale={20}
-                castShadow={true}
-                onPointerOver={() => {
-                    setHover(true);
-                }}
-                onPointerOut={() => {
-                    setHover(false);
-                }}
-            >
-                <sphereBufferGeometry args={[0.7, 30, 30]} attach="geometry" />
-                <meshLambertMaterial /*wireframe*/ color={"rgb(10, 50, 80)"}></meshLambertMaterial>
-            </mesh>
-        )
-    }
 
     function LoadEnvironment(props) {
 
@@ -198,28 +246,17 @@ export default function ThreeNew(props) {
                             color="white"
                             image="/xMooney_Logo_Token_1000px_x_1000px.png" />
                         <TimeOfDay {...props}
-                            environmentLB1={[values.x, values.y, values.z]}
-                            environmentLB2={[values.lb2X, values.lb2Y, values.lb2Z]}
+                            environmentMoon={[values.lb1X, values.lb1Y, values.lb1Z]}
+                            environmentSun={[values.lb2X, values.lb2Y, values.lb2Z]}
                         ></TimeOfDay>
-                        <Physics gravity={[0, -9.81, 0]}>
-                            <GetBall></GetBall>
+                        <Physics>
+                            <GetBall scale={20} position={[50, 25, 50]}></GetBall>
+                            <Ball position={[-50, 25, 50]}></Ball>
+                            <GetPlane></GetPlane>
+                            {positions.map((position, idx) => (
+                                <Box2 position={position} key={idx} />
+                            ))}
                         </Physics>
-                        <ObjectStich.Plane name={"Plane_Ground"}
-                            displayName={"Plane_Ground"}
-                            receiveShadow={true}
-                            side={THREE.DoubleSide}
-                            // color= {"#ffffff"} //{colorObj}
-                            width={10}
-                            height={10}
-                            position={[0, 0, 0]}
-                            scale={20}
-                            map={useLoader(TextureLoader, '/textures/grass3.jpg')}
-                            bumpMap={useLoader(TextureLoader, '/textures/grass3.jpg')}
-                            roughnessMap={useLoader(TextureLoader, '/textures/grass3.jpg')}
-                            bumpScale={1}
-                            metalness={-.5}
-                            roughness={101}
-                            rotation={[Math.PI / 2, 0, 0]}></ObjectStich.Plane>
                         {/* <LightBulb position={[10, -1, -50]} /> */}
                         {<Floor color="white" position={[0, -20.1, 0]} size={[10, 2, 10]} scale="20" />}
 
@@ -281,7 +318,7 @@ export default function ThreeNew(props) {
 
                 <Suspense fallback={<Loader />}>
                     <perspectiveCamera {...camera} />
-                    {/* <OrbitControls
+                    <OrbitControls
                         //[100, 60, 75]
                         //  position={[100, 60, 75]}
                         ref={OrbitControlsRef}
@@ -293,8 +330,8 @@ export default function ThreeNew(props) {
                         maxDistance={300}
                     // enablePan={false}
 
-                    /> */}
-                    <Character camera={camera} scale={10} position={new THREE.Vector3(-20, -0.05, 0)} rotation={[0, 0, 0]} quaternion={new THREE.Quaternion()} />
+                    />
+                    {/* <Character camera={camera} scale={10} position={new THREE.Vector3(-20, -0.05, 0)} rotation={[0, 0, 0]} quaternion={new THREE.Quaternion()} /> */}
                     <LoadEnvironment />
 
                     {/* <GetSpotLight
@@ -324,7 +361,7 @@ export default function ThreeNew(props) {
             </Canvas>
             <Leva
                 collapsed={true} // default = false, when true the GUI is collpased
-                hidden={false} // default = false, when true the GUI is hidden
+                hidden={true} // default = false, when true the GUI is hidden
             // theme={myTheme} // you can pass a custom theme (see the styling section)
             // fill // default = false,  true makes the pane fill the parent dom node it's rendered in
             // flat // default = false,  true removes border radius and shadow

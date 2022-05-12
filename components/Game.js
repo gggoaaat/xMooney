@@ -136,8 +136,8 @@ export default function Game() {
             <div className="scene" id="theScene">
                 <Canvas shadows gl={{ alpha: false }} camera={{ fov: 45 }}>
                     <TimeOfDay
-                        environmentLB1={[values.x, values.y, values.z]}
-                        environmentLB2={[values.lb2X, values.lb2Y, values.lb2Z]}
+                        environmentSun={[values.x, values.y, values.z]}
+                        environmentMoon={[values.lb2X, values.lb2Y, values.lb2Z]}
                     ></TimeOfDay>
                     <ambientLight intensity={0.3} />
                     <pointLight castShadow intensity={0.8} position={[100, 100, 100]} />

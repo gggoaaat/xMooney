@@ -1,6 +1,6 @@
 import ThreeApp from "../threejs/ThreeApp";
 import { useEffect, useRef, useState, useLayoutEffect } from "react";
-import { useThree } from "../hooks/useThree";
+// import { useThree } from "../hooks/useThree";
 import { useControls } from 'leva'
 
 export default function XMVR() {  
@@ -12,7 +12,7 @@ export default function XMVR() {
     })
 
     const [cnva, setCNVA] = useState();
-    const canvas = useThree(ThreeApp, { cnva, setCNVA, values});  
+    // const canvas = useThree(ThreeApp, { cnva, setCNVA, values});  
 
     return (
         <>
