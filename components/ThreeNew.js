@@ -1,6 +1,6 @@
 import React, { forwardRef, useRef, useState, useMemo, Suspense, useEffect, useLayoutEffect } from 'react'
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
-import { Html, useProgress, OrbitControls } from '@react-three/drei'
+import { Html, useProgress, OrbitControls,Sphere} from '@react-three/drei'
 import { Physics, usePlane, useSphere, useBox } from "@react-three/cannon";
 import * as THREE from "three";
 import { Leva, folder, useControls } from 'leva'
@@ -13,6 +13,7 @@ import Warehouse from "../components/assets/Warehouse";
 import objectStich from './ObjectStich';
 import TimeOfDay from './TimeOfDay';
 import Character from './Character';
+import GamePlane from './GamePlane';
 // import { useRenderRoot } from 'leva/dist/declarations/src/components/Leva';
 
 const positions = [
@@ -38,31 +39,54 @@ function Box2({ position }) {
         </mesh>
     );
 }
-const Ball = ({ position, color }) => {
-    const [ballRef] = useSphere(() => ({ mass: 1, position: position }));
+
+
+
+
+const Ball = (props) => {
+    // const map = useTexture(earthImg)
+    const [ballRef, api] = useSphere(() => ({ mass: 1, args: [0.5],position: props.position ? props.position : THREE.Vector3()}))
+    usePlane(() => ({
+        type: "Static",
+        rotation: [-Math.PI / 2, 0, 0],
+        // position: [-50, 0,10],
+        // onCollide: () => {
+        //   api.position.set(-20, 15, 20)
+        //   api.velocity.set(-20, 15, 20)
+        // //   state.api.reset()
+        // },
+    }))
   
+    // ballRef.position =[-50, 0,10];
   
     return (
-      <mesh ref={ballRef} position={position} receiveShadow castShadow>
-        <sphereBufferGeometry args={[1, 36, 36]} />
-        <meshPhysicalMaterial
-          color={color}
-         
-        />
-      </mesh>
+    //   <mesh ref={ballRef} scale={5} receiveShadow castShadow>
+    //     <sphereBufferGeometry args={[1, 36, 36]} />
+    //     <meshPhysicalMaterial
+    //       {...props}
+    //     //   map={map}
+    //     />
+    //   </mesh>
+        <Sphere ref={ballRef} {...props}></Sphere>
     );
   };
 
   
 function GetBall(props) {
+
+    // props.mass = 1
     // const ballRef = useRef();
     const [ballRef] = useSphere(() => ({
-        mass: 1,
-        // position: props.position,
+       
+        mass : 1,
+        position: props.position,
         // rotation: [0, 0, 0],
         // receiveShadow: true,
         // type: "Static"
     }))
+
+    
+    ballRef.position = props.position;
 
     const [active, setActive] = useState(false);
     const [hover, setHover] = useState(false);
@@ -97,7 +121,7 @@ function GetBall(props) {
             }}
         >
             <sphereBufferGeometry
-                // attach="geometry"
+                attach="geometry"                
                 args={[1, 36, 36]}
             />
             <meshLambertMaterial
@@ -139,7 +163,6 @@ const GetPlane = () => {
                 metalness={-.5}
                 roughness={101}
             />
-
         </mesh>
     )
 }
@@ -224,6 +247,18 @@ export default function ThreeNew(props) {
         )
     })
 
+    function PhysicsCharacter(props)
+    {
+        const ref=useRef();
+        // const [ref, api] = usePlane(() => ({
+        //     mass: 1,
+        //     position: [0, 0, 0],
+        //     rotation: [-Math.PI / 2, 0, 0],
+        //     type: "Static"
+        // }))
+
+        return (<Character ref={ref} camera={camera} scale={10} position={props.position ? props.position : new THREE.Vector3(-20, -0.05, 0)} rotation={[0, 0, 0]} quaternion={new THREE.Quaternion()} />)
+    }
 
 
     function LoadEnvironment(props) {
@@ -233,7 +268,10 @@ export default function ThreeNew(props) {
 
         const [active, setActive] = useState(false);
         const [hover, setHover] = useState(false);
-
+        function scale() {
+            api.applyForce(new Vec3(5, 5, 5), new Vec3(0, -1, 0))
+          }
+          
         return (
             <>
                 <group ref={environmentWrap} name="environmentWrap" position={[values.x, values.y, values.z]} rotation={[0, 0, 0]} scale="1">
@@ -250,15 +288,21 @@ export default function ThreeNew(props) {
                             environmentSun={[values.lb2X, values.lb2Y, values.lb2Z]}
                         ></TimeOfDay>
                         <Physics>
-                            <GetBall scale={20} position={[50, 25, 50]}></GetBall>
-                            <Ball position={[-50, 25, 50]}></Ball>
+                            <GetBall radius={15} position={[-50, 10, 0]}></GetBall>
+                            <group position={[0, 5, 0]}>
+                                <Ball position={[-50, 25, 50]} scale={5} receiveShadow></Ball>
+                            </group>
                             <GetPlane></GetPlane>
+                            {/* <GamePlane rotation={[-Math.PI / 2, 0, 0]}></GamePlane> */}
                             {positions.map((position, idx) => (
                                 <Box2 position={position} key={idx} />
                             ))}
+                            {/* <PhysicsCharacter position={[-20, -0.05, 0]}></PhysicsCharacter> */}
                         </Physics>
+                      
                         {/* <LightBulb position={[10, -1, -50]} /> */}
                         {<Floor color="white" position={[0, -20.1, 0]} size={[10, 2, 10]} scale="20" />}
+
 
                         <Warehouse receiveShadow={false} scale={[3, 3, 3]} position={[0, (2.95 * 3) - .1, 80]}></Warehouse>
                     </group>
@@ -318,6 +362,7 @@ export default function ThreeNew(props) {
 
                 <Suspense fallback={<Loader />}>
                     <perspectiveCamera {...camera} />
+                    
                     <OrbitControls
                         //[100, 60, 75]
                         //  position={[100, 60, 75]}
@@ -331,7 +376,7 @@ export default function ThreeNew(props) {
                     // enablePan={false}
 
                     />
-                    {/* <Character camera={camera} scale={10} position={new THREE.Vector3(-20, -0.05, 0)} rotation={[0, 0, 0]} quaternion={new THREE.Quaternion()} /> */}
+                    
                     <LoadEnvironment />
 
                     {/* <GetSpotLight

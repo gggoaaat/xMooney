@@ -28,16 +28,20 @@ export default function TimeOfDay(props) {
     else {
 
         return (<>
-
+            <LightBulb
+                intensity={1}
+                runCircularAnimation={{ enabled: true, speed: 0.01, interval: 0, x: 150, y: 150, z: 120, radius: 20 }}
+                position={props.environmentSun ? props.environmentSun : [-100,20,0]}
+                size={[5, 30, 10]} />
             <LightBulb
                 intensity={0.30}
-               // runCircularAnimation={{ enabled: false, speed: 0.01, interval: 0, x: 150, y: -100, radius: 20 }}
+                runCircularAnimation={{ enabled: true, speed: 0.01, interval: 0, x: 150, y: -100, radius: 20 }}
                 position={props.environmentMoon ? props.environmentMoon : [0,20,0]}
                 size={[3, 30, 150]}
                 color={"#F4FDFF"}
             />
             
-            <Cloud scale={100}  position={props.environmentMoon ? props.environmentMoon : [0,20,0]}></Cloud>
+            {/* <Cloud scale={100}  position={props.environmentMoon ? props.environmentMoon : [0,20,0]}></Cloud> */}
             <Stars></Stars>
         </>)
     }

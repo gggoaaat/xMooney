@@ -1,8 +1,9 @@
 import { useFrame, useLoader } from "@react-three/fiber";
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useMemo, useCallback, useEffect, useRef } from "react";
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
 import { useFBX } from "@react-three/drei";
 import * as THREE from "three";
+import { Physics, usePlane, useConvexPolyhedron } from "@react-three/cannon";
 import {
   GLTFLoader
 } from 'three/examples/jsm/loaders/GLTFLoader';
@@ -12,9 +13,12 @@ import { Mesh } from "three";
 const Character = (props) => {
 
   const camera = props.camera;
-  const character = useRef();
+   const character = useRef();
+  const model = useLoader(GLTFLoader, '/robot2/scene.gltf');
+  // const geo = useMemo(() => toConvexProps(nodes.Cylinder.geometry), [model.nodes ? model.nodes : []]);
+  // const [character] = useConvexPolyhedron(() => ({ mass: 100, ...props, args: geo }));
 
-  const activeAnimation ={
+  const activeAnimation = {
     forward: false,
     backward: false,
     left: false,
@@ -31,7 +35,7 @@ const Character = (props) => {
   const acceleration = new THREE.Vector3(1, 0.125, 100.0);
   const velocity = new THREE.Vector3(0, 0, 0);
 
-  const model = useLoader(GLTFLoader, '/robot2/scene.gltf');
+  
 
   // model.scale.setScalar(0.1);
   // model.traverse((f) => {
@@ -39,13 +43,26 @@ const Character = (props) => {
   //   f.receiveShadow = true;
   // });
 
+  /**
+ * Returns legacy geometry vertices, faces for ConvP
+ * @param {THREE.BufferGeometry} bufferGeometry
+ */
+  function toConvexProps(bufferGeometry) {
+    const geo = new Geometry().fromBufferGeometry(bufferGeometry);
+    // Merge duplicate vertices resulting from glTF export.
+    // Cannon assumes contiguous, closed meshes to work
+    geo.mergeVertices();
+    return [geo.vertices.map((v) => [v.x, v.y, v.z]), geo.faces.map((f) => [f.a, f.b, f.c]), []]; // prettier-ignore
+  }
+  let monkeyMesh = new THREE.Object3D()
   model.scene.traverse(child => {
     if (child.isMesh) {
-        child.castShadow = true
-        child.receiveShadow = true
-        child.material.side = THREE.FrontSide
+      child.castShadow = true
+      child.receiveShadow = true
+      child.material.side = THREE.FrontSide
+      monkeyMesh = child
     }
-})
+  })
 
   const mixer = new THREE.AnimationMixer(model.scene);
 
@@ -81,21 +98,22 @@ const Character = (props) => {
   // Controll Input
   const handleKeyPress = useCallback((event) => {
     switch (event.keyCode) {
+      case 38: //ArrowUp
       case 87: //w
         activeAnimation.forward = true;
 
         break;
-
+      case 37: //ArrowLeft
       case 65: //a
         activeAnimation.left = true;
 
         break;
-
+      case 40: //ArrowDown
       case 83: //s
         activeAnimation.backward = true;
 
         break;
-
+      case 39: //ArrowRight
       case 68: // d
         activeAnimation.right = true;
 
@@ -112,32 +130,33 @@ const Character = (props) => {
   }, []);
 
   const handleKeyUp = useCallback((event) => {
-    
+
     switch (event.keyCode) {
+      case 38: //ArrowUp
       case 87: //w
         activeAnimation.forward = false;
         break;
-
+      case 37: //ArrowLeft
       case 65: //a
         activeAnimation.left = false;
         break;
-
+      case 40: //ArrowDown
       case 83: //s
         activeAnimation.backward = false;
         break;
-
+      case 39: //ArrowRight
       case 68: // d
         activeAnimation.right = false;
         break;
 
       case 69: //e dance
         activeAnimation.dance = false;
-      
+
         break;
 
       case 16: // shift
         activeAnimation.run = false;
-        
+
         break;
     }
   }, []);
@@ -146,13 +165,19 @@ const Character = (props) => {
     const idealOffset = new THREE.Vector3(0, 10, -30);
     idealOffset.applyQuaternion(character.current.quaternion);
     idealOffset.add(character.current.position);
+
+    // console.log({ q: idealOffset.quaternion, p: idealOffset.position })
+
     return idealOffset;
   };
 
   const calculateIdealLookat = () => {
     const idealLookat = new THREE.Vector3(0, 5, 50);
     idealLookat.applyQuaternion(character.current.quaternion);
+    
     idealLookat.add(character.current.position);
+    // console.log({ q: idealLookat.quaternion, p: idealLookat.position })
+    
     return idealLookat;
   };
 
@@ -304,7 +329,12 @@ const Character = (props) => {
     };
   });
 
-  return (<primitive object={model.scene} scale={20} ref={character} {...props}/>);
+  return (<primitive 
+    object={model.scene} 
+    ref={character} 
+    // geometry={nodes.Cylinder.geometry}
+    {...props} 
+  />);
 };
 
 export default Character;
